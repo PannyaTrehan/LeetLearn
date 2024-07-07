@@ -22,6 +22,38 @@ function ProblemsTable() {
                     <td>Easy</td>
                     <td>Expert</td>
                 </tr>
+                <tr>
+                    <td>Two Sum</td>
+                    <td>7/07/2024</td>
+                    <td>4/07/2024</td>
+                    <td>40% (2/5)</td>
+                    <td>Easy</td>
+                    <td>Expert</td>
+                </tr>
+                <tr>
+                    <td>Two Sum</td>
+                    <td>7/07/2024</td>
+                    <td>4/07/2024</td>
+                    <td>40% (2/5)</td>
+                    <td>Easy</td>
+                    <td>Expert</td>
+                </tr>
+                <tr>
+                    <td>Two Sum</td>
+                    <td>7/07/2024</td>
+                    <td>4/07/2024</td>
+                    <td>40% (2/5)</td>
+                    <td>Easy</td>
+                    <td>Expert</td>
+                </tr>
+                <tr>
+                    <td>Two Sum</td>
+                    <td>7/07/2024</td>
+                    <td>4/07/2024</td>
+                    <td>40% (2/5)</td>
+                    <td>Easy</td>
+                    <td>Expert</td>
+                </tr>
             </tbody>
         </Table>
     );
