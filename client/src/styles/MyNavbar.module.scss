@@ -1,0 +1,22 @@
+.myNavbar{
+    border-bottom: .1px solid #a7a2a2;
+
+    .profileIcon{
+        font-size: 1.6rem;
+    }
+    
+    .streakLink{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    
+        .streakCount{
+            font-weight: 500;
+        }
+    }
+    
+    .streakIcon, .bellIcon{
+        font-size: 1.5rem;
+    }
+}
+
