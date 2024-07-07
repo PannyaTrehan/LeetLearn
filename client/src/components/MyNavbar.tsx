@@ -26,7 +26,7 @@ function MyNavbar() {
               <FaFire className={styles.streakIcon} />
               <span className={styles.streakCount}>12</span>
             </Nav.Link>
-            <Nav.Link className={styles.navLink}>
+            <Nav.Link as={Link} to="/signup" className={styles.navLink}>
               <FaUserCircle className={styles.profileIcon} />
             </Nav.Link>
           </Nav>
