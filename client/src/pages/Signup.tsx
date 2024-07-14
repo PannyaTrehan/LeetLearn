@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { Container, Row, Button, Form, Card, Col } from 'react-bootstrap';
 import { FaGoogle, FaGithub, FaFacebook } from 'react-icons/fa';
+import { useGoogleLogin } from '@react-oauth/google';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+
+type TokenResponse = {
+    access_token: string;
+    // Add any other properties you expect in the token response
+  };
 
 function Signup() {
     const [email, setEmail] = useState<string>("");
@@ -15,7 +22,30 @@ function Signup() {
         console.log('Password:', password);
         console.log('Confirm Password:', confirmPassword);
     };
+
+    const onSuccess = async (response: TokenResponse) => {
+        try {
+          const res = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+            headers: {
+              Authorization: `Bearer ${response.access_token}`,
+            },
+          });
+          console.log(res);
+        } catch (err) {
+          console.log(err);
+        }
+      };
     
+      const onFailure = (error: any) => {
+        console.log(error);
+      };
+    
+      const login = useGoogleLogin({
+        onSuccess,
+        onFailure,
+        clientId: '269807828068-ansiu2a3cvtaka42oroe80v4mnenv5fs.apps.googleusercontent.com', // replace with your client ID
+      });
+
     return (
         <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '60vh' }}>
             <Row className="w-100">
@@ -68,7 +98,7 @@ function Signup() {
                             <div className="text-center mt-2">
                                 <span>or you can sign in with</span>
                                 <div className="d-flex justify-content-center mt-2">
-                                    <Button variant="light" className="mx-1"><FaGoogle /></Button>
+                                    <Button variant="light" className="mx-1" onClick={signIn}><FaGoogle /></Button>
                                     <Button variant="light" className="mx-1"><FaGithub /></Button>
                                     <Button variant="light" className="mx-1"><FaFacebook /></Button>
                                 </div>

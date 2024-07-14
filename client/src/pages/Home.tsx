@@ -1,6 +1,7 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import ProblemsTable from '../components/ProblemsTable';
 import styles from "../styles/Home.module.scss";
+import Data from '../components/Data';
 
 function Home() {
     return(
@@ -20,6 +21,9 @@ function Home() {
                     </Row>
                     <ProblemsTable />
                 </Col>
+            </Row>
+            <Row>
+                <Data />
             </Row>
         </Container>
     );
