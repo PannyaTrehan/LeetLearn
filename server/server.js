@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const db = require("./src/database");
+const db = require("./src/database/index.js");
 
 // Sync the database
 db.sync();

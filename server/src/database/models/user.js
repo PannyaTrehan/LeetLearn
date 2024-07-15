@@ -1,14 +1,36 @@
 module.exports = (sequelize, DataTypes) =>
     sequelize.define("user", {
+        user_id: {
+            type: DataTypes.UUID,
+            primaryKey: true,
+            allowNull: false
+        },
         email: {
             type: DataTypes.STRING(254),
-            primaryKey: true,
             allowNull: false
         },
         password: {
             type: DataTypes.STRING(225),
             allowNull: false
-        }, 
+        },
+        profile_pic: {
+            type: DataTypes.STRING(225),
+            allowNull: true
+        },
+        max_questions: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        join_date: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW
+        },
+        streak: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0
+        }
     }, {
-      timestamps: false
+      timestamps: true //want to know how long the user has been created for
     });
