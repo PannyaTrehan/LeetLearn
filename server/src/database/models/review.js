@@ -6,10 +6,6 @@ module.exports = (sequelize, DataTypes) =>
             allowNull: false,
             autoIncrement: true
         },
-        problem_number: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
         review_date: {
             type: DataTypes.DATE,
             allowNull: false

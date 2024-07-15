@@ -19,20 +19,23 @@ db.user_question = require("./models/user_question.js")(db.sequelize, DataTypes)
 db.question_tag = require("./models/question_tag.js")(db.sequelize, DataTypes);
 
 // Define associations.
-db.user.hasMany(db.review, { as: "review", foreignKey: "user_id"});
-db.review.hasMany(db.user, { foreignKey: "user_id"});
-
 db.user.belongsToMany(db.question, {through: db.user_question, foreignKey: "user_id", otherKey: 'question_id'});
 db.question.belongsToMany(db.user, { through: db.user_question, foreignKey: 'question_id', otherKey: 'user_id' });
 
 db.tag.belongsToMany(db.question, {through: db.question_tag, foreignKey: "tag_id", otherKey: 'question_id'});
 db.question.belongsToMany(db.tag, { through: db.question_tag, foreignKey: 'question_id', otherKey: 'tag_id' });
 
+//1-many relationship between the user_question (user's question that's saved) and a review (user's reviews for a question) 
+db.user_question.hasMany(db.review, { as: "review", foreignKey: "user_question_id"});
+db.review.belongsTo(db.user_question, { as: "user_question", foreignKey: "user_question_id"});
+
 db.sync = async () => {
   // Sync schema.
   await db.sequelize.sync();
 
-  await seedData();
+  await initialData();
+
+  // await seedData();
 };
 
 async function seedData() {
@@ -47,6 +50,70 @@ async function seedData() {
   // let hash = await argon2.hash("Happy123$", { type: argon2.argon2id });
 
   // await db.user.create({ email: "mbolger@gmail.com", password: hash});
+}
+
+async function initialData() {
+  try {
+
+    const argon2 = require("argon2");
+
+    let hash1 = await argon2.hash("James123456!", { type: argon2.argon2id });
+    let hash2 = await argon2.hash("Phil123456!", { type: argon2.argon2id });
+    
+    const users = [
+      { email: "james@email.com", password: hash1, profile_pic: "james.jpg", max_questions: 10},
+      { email: "phil@email.com", password: hash2, profile_pic: "phil.jpg", max_questions: 15}
+    ]
+
+    const createdUsers = await db.user.bulkCreate(users, { returning: true });
+
+    const tags = [
+      { title: "New" },
+      { title: "Learning" },
+      { title: "Relearning" },
+      { title: "Young" },
+      { title: "Mature" }
+    ]
+
+    const createdTags = await db.tag.bulkCreate(tags, { returning: true });
+
+    const questions = [
+      { title: "1. Two Sum", difficulty: "Easy" },
+      { title: "9. Palindrome Number", difficulty: "Easy" },
+      { title: "6. Zigzag Conversion", difficulty: "Medium" },
+      { title: "4. Median of Two Sorted Arrays", difficulty: "Hard" },
+      { title: "31. Next Permutation", difficulty: "Medium" },
+    ]
+
+    const createdQuestions = await db.question.bulkCreate(questions, { returning: true });
+
+
+    const question_tags = [
+      { tag_id: 1, question_id: createdQuestions[2].question_id },
+      { tag_id: 2, question_id: createdQuestions[1].question_id }
+    ]
+
+    const createdQuestionTags = await db.question_tag.bulkCreate(question_tags, { returning: true });
+
+    const now = new Date();
+
+    const user_questions = [
+      { next_review: now, user_id: createdUsers[0].user_id, question_id: createdQuestions[3].question_id },
+      { next_review: now, user_id: createdUsers[1].user_id, question_id: createdQuestions[2].question_id }
+    ]
+
+    const createdUserQuestions = await db.user_question.bulkCreate(user_questions, { returning: true });
+
+    const reviews = [
+      { review_date: now, successful: false, optimal: 0, time: 5, assistance: 4, notes: "Not really that good. Couldn't really understand what was happening.", user_question_id: createdUserQuestions[0].user_question_id},
+    ]
+
+    const createdReviews = await db.review.bulkCreate(reviews, { returning: true });
+
+
+  } catch (error) {
+    console.log("Error adding initial data:", error);
+  }
 }
 
 module.exports = db;
