@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const db = require("./src/database/index.js");
+require('dotenv').config();
 
 // Sync the database
 db.sync();
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
 
 // Add routes
 require("./src/routes/user.routes.js")(express, app);
+require("./src/routes/review.routes.js")(express, app);
 
 // Set port, listen for requests
 const PORT = 4000;

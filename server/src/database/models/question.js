@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) =>
         },
         title: {
             type: DataTypes.STRING(225),
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
         difficulty: {
             type: DataTypes.ENUM('Easy', 'Medium', 'Hard'),

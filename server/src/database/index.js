@@ -33,9 +33,7 @@ db.sync = async () => {
   // Sync schema.
   await db.sequelize.sync();
 
-  await initialData();
-
-  // await seedData();
+  await seedData();
 };
 
 async function seedData() {
@@ -45,16 +43,11 @@ async function seedData() {
     return;
   }
 
-  // const argon2 = require("argon2");
-
-  // let hash = await argon2.hash("Happy123$", { type: argon2.argon2id });
-
-  // await db.user.create({ email: "mbolger@gmail.com", password: hash});
+  await initialData();
 }
 
 async function initialData() {
   try {
-
     const argon2 = require("argon2");
 
     let hash1 = await argon2.hash("James123456!", { type: argon2.argon2id });
