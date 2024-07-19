@@ -41,6 +41,14 @@ module.exports = (sequelize, DataTypes) =>
         notes: {
             type: DataTypes.TEXT,
             allowNull: true
+        },
+        user_question_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: "user_questions",
+                key: "user_question_id"
+            }
         }
     }, {
       timestamps: false

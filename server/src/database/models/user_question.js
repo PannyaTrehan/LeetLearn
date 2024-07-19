@@ -8,8 +8,30 @@ module.exports = (sequelize, DataTypes) =>
         },
         next_review: {
             type: DataTypes.DATE,
+            allowNull: true,
+        },
+        question_id: {
+            type: DataTypes.INTEGER,
             allowNull: false,
+            references: {
+                model: 'questions',
+                key: 'question_id'
+            }
+        },
+        user_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'users',
+                key: 'user_id'
+            }
         }
     }, {
-      timestamps: false
+      timestamps: false,
+      indexes: [
+            {
+                unique: true,
+                fields: ['question_id', 'user_id']
+            }
+        ]
     });

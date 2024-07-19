@@ -19,8 +19,6 @@ exports.getUserReviews = async (req, res) => {
 
         const userQuestionIDs = user_questions.map(uq => uq.user_question_id);
 
-        console.log(userQuestionIDs)
-
         const reviews = await db.review.findAll({
             where: {
                 user_question_id: userQuestionIDs
@@ -30,5 +28,24 @@ exports.getUserReviews = async (req, res) => {
         res.json(reviews);
     } catch (error) {
         console.error("Error fetching user reviews:", error);
+    }
+};
+
+// Create a review for a user qustion
+exports.createReview = async (req, res) => {
+    try {    
+        const review = await db.review.create({
+            review_id: req.body.user_question,
+            review_date: req.body.review_date,
+            successful: req.body.successful,
+            optimal: req.body.optimal,
+            time: req.body.time,
+            assistance: req.body.assistance,
+            user_question_id: req.body.user_question_id
+        });
+
+        res.json(review);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 };

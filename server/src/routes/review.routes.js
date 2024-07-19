@@ -8,6 +8,9 @@ module.exports = (express, app) => {
     // Select all reviews for a given user id
     router.get("/select/:id", controller.getUserReviews);
 
+    // Create a review
+    router.post("/", controller.createReview);
+
     // Add routes to server.
     app.use("/api/reviews", router);
   };

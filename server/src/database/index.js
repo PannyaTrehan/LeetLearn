@@ -29,6 +29,10 @@ db.question.belongsToMany(db.tag, { through: db.question_tag, foreignKey: 'quest
 db.user_question.hasMany(db.review, { as: "review", foreignKey: "user_question_id"});
 db.review.belongsTo(db.user_question, { as: "user_question", foreignKey: "user_question_id"});
 
+//one question can "have" many user_questions, but one user_question can only belong to one question
+db.question.hasMany(db.user_question, { as: "user_question", foreignKey: "question_id"});
+db.user_question.belongsTo(db.question, { as: "question", foreignKey: "question_id"});
+
 db.sync = async () => {
   // Sync schema.
   await db.sequelize.sync();
