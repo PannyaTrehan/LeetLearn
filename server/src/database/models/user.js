@@ -21,7 +21,8 @@ module.exports = (sequelize, DataTypes) =>
         },
         max_questions: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            defaultValue: 5
         },
         join_date: {
             type: DataTypes.DATE,

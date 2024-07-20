@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken"); // For generating JWT tokens
 // Select all users from the database
 exports.getAllUsers = async (req, res) => {
     const users = await db.user.findAll();
-  
+
     res.json(users);
 };
 
@@ -17,6 +17,27 @@ exports.getUserByID = async (req, res) => {
     res.json(user);
 };
 
+exports.getUserByEmail = async (req, res) => {
+    try {
+        const user = await db.user.findOne({
+            where: {
+                email: req.params.email
+            },
+            attributes: {
+                exclude: ['user_id']
+            }
+        });
+
+        if (user) {
+            res.json(user);
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
 // Create a user
 exports.createUser = async (req, res) => {
     try {
@@ -24,13 +45,15 @@ exports.createUser = async (req, res) => {
     
         const user = await db.user.create({
             email: req.body.email,
-            password: hashedPassword,
-            profile_pic: req.body.profile_pic,
-            max_questions: req.body.max_questions
+            password: hashedPassword
         });
 
-        res.json(user);
-        // res.status(201).json(user);
+        res.status(201).json({
+            user_id: user.user_id,
+            email: user.email,
+            profile_pic: user.profile_pic,
+            max_questions: user.max_questions,
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

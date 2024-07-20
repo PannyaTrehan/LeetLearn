@@ -1,19 +1,16 @@
 module.exports = (express, app) => {
     const controller = require("../controllers/user.controller.js");
     const router = express.Router();
-  
-    // Select all users from the database
-    router.get("/", controller.getAllUsers);
+    const authenticateToken = require('../middleware/authenticateToken.js');
 
-    // Select a single user with a user id
-    router.get("/select/:id", controller.getUserByID);
-
-    // Create a user
+    // Public routes
     router.post("/", controller.createUser);
-
-    // Login a user
     router.post("/login", controller.loginUser);
+
+    //Protected routes
+    router.get("/", authenticateToken, controller.getAllUsers);
+    router.get("/select/:id",authenticateToken, controller.getUserByID);
+    router.get("/email/:email",authenticateToken, controller.getUserByEmail);
   
-    // Add routes to server.
     app.use("/api/users", router);
   };
