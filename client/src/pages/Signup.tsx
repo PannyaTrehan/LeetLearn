@@ -1,50 +1,54 @@
 import React, { useState } from "react";
-import { Container, Row, Button, Form, Card, Col } from 'react-bootstrap';
+import { Container, Row, Button, Form, Card, Col, FormControl } from 'react-bootstrap';
 import { FaGoogle, FaGithub, FaFacebook } from 'react-icons/fa';
-import { useGoogleLogin } from '@react-oauth/google';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-
-type TokenResponse = {
-    access_token: string;
-    // Add any other properties you expect in the token response
-  };
+import { createUser, isValidEmail, isValidPassword } from "../api/UserRequests";
 
 function Signup() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
+    const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string } | null>(null);
+    const [generalError, setGeneralError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Handle signup logic here
-        console.log('Email:', email);
-        console.log('Password:', password);
-        console.log('Confirm Password:', confirmPassword);
-    };
+        const newErrors: { [key: string]: string | null } = {};
+        setGeneralError(null);
+        setSuccess(null);
 
-    const onSuccess = async (response: TokenResponse) => {
-        try {
-          const res = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
-            headers: {
-              Authorization: `Bearer ${response.access_token}`,
-            },
-          });
-          console.log(res);
-        } catch (err) {
-          console.log(err);
+        if (!isValidEmail(email)) {
+            newErrors.email = "Invalid email format";
         }
-      };
-    
-      const onFailure = (error: any) => {
-        console.log(error);
-      };
-    
-      const login = useGoogleLogin({
-        onSuccess,
-        onFailure,
-        clientId: '269807828068-ansiu2a3cvtaka42oroe80v4mnenv5fs.apps.googleusercontent.com', // replace with your client ID
-      });
+
+        if (!isValidPassword(password)) {
+            newErrors.password = "Password is not valid";
+        }
+
+        if (password !== confirmPassword) {
+            newErrors.confirmPassword = ("Passwords do not match");
+        }
+
+        setErrors(newErrors);
+
+        if (Object.keys(newErrors).length > 0) {
+            return;
+        }
+
+        try {
+            const userResponse = await createUser({
+                email,
+                password
+            });
+
+            setSuccess("User created successfully!");
+            console.log('User created:', userResponse);
+        } catch (error) {
+            console.error('Error creating user:', error);
+            setGeneralError("Error creating user. Please try again.");
+        }
+    };
 
     return (
         <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '60vh' }}>
@@ -52,9 +56,8 @@ function Signup() {
                 <Col md={{ span: 6, offset: 3 }}>
                     <Card>
                         <Card.Body>
-                            <div>
-
-                            </div>
+                            {generalError && <div className="alert alert-danger">{generalError}</div>}
+                            {success && <div className="alert alert-success">{success}</div>}
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group controlId="formEmail">
                                     <Form.Label>Email address</Form.Label>
@@ -63,7 +66,10 @@ function Signup() {
                                         placeholder="Enter email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
+                                        isInvalid={!!errors?.email}
                                     />
+
+                                    {errors?.email && <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>}
                                 </Form.Group>
                 
                                 <Form.Group controlId="formPassword" className='mt-2'>
@@ -73,7 +79,10 @@ function Signup() {
                                         placeholder="Password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
+                                        isInvalid={!!errors?.password}
                                     />
+
+                                    {errors?.password && <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>}
                                 </Form.Group>
                 
                                 <Form.Group controlId="formConfirmPassword" className='mt-2'>
@@ -83,7 +92,10 @@ function Signup() {
                                         placeholder="Confirm Password"
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
+                                        isInvalid={!!errors?.confirmPassword}
                                     />
+
+                                    {errors?.confirmPassword && <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>}
                                 </Form.Group>
                 
                                 <Button variant="primary" type="submit" className="w-100 mt-4">
@@ -98,7 +110,7 @@ function Signup() {
                             <div className="text-center mt-2">
                                 <span>or you can sign in with</span>
                                 <div className="d-flex justify-content-center mt-2">
-                                    <Button variant="light" className="mx-1" onClick={signIn}><FaGoogle /></Button>
+                                    <Button variant="light" className="mx-1"><FaGoogle /></Button>
                                     <Button variant="light" className="mx-1"><FaGithub /></Button>
                                     <Button variant="light" className="mx-1"><FaFacebook /></Button>
                                 </div>

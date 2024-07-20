@@ -2,16 +2,47 @@ import React, { useState } from "react";
 import { Container, Row, Button, Form, Card, Col } from 'react-bootstrap';
 import { FaGoogle, FaGithub, FaFacebook } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { loginUser, isValidEmail, isValidPassword } from "../api/UserRequests";
 
 function Signin() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [errors, setErrors] = useState<{ email?: string; password?: string } | null>(null);
+    const [generalError, setGeneralError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Handle signup logic here
-        console.log('Email:', email);
-        console.log('Password:', password);
+        const newErrors: { [key: string]: string | null } = {};
+        setGeneralError(null);
+        setSuccess(null);
+
+        if (!isValidEmail(email)) {
+            newErrors.email = "Invalid email format";
+        }
+
+        if (!isValidPassword(password)) {
+            newErrors.password = "Password is not valid";
+        }
+
+        setErrors(newErrors);
+
+        if (Object.keys(newErrors).length > 0) {
+            return;
+        }
+
+        try {
+            const loginResponse = await loginUser({
+                email,
+                password
+            });
+
+            setSuccess("User logged in successfully!");
+            console.log('User logged in, jwtToken:', loginResponse.token);
+        } catch (error) {
+            console.error('Error logging in user:', error);
+            setGeneralError("Error logging in user. Please try again.");
+        }
     };
 
     return (
@@ -20,9 +51,8 @@ function Signin() {
                 <Col md={{ span: 6, offset: 3 }}>
                     <Card>
                         <Card.Body>
-                            <div>
-
-                            </div>
+                            {generalError && <div className="alert alert-danger">{generalError}</div>}
+                            {success && <div className="alert alert-success">{success}</div>}
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group controlId="formEmail">
                                     <Form.Label>Email address</Form.Label>
@@ -31,7 +61,10 @@ function Signin() {
                                         placeholder="Enter email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
+                                        isInvalid={!!errors?.email}
                                     />
+
+                                    {errors?.email && <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>}
                                 </Form.Group>
                 
                                 <Form.Group controlId="formPassword" className='mt-2'>
@@ -41,11 +74,12 @@ function Signin() {
                                         placeholder="Password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
+                                        isInvalid={!!errors?.password}
                                     />
                                 </Form.Group>
                 
                                 <Button variant="primary" type="submit" className="w-100 mt-4">
-                                    Sign Up
+                                    Sign In
                                 </Button>
                             </Form>
 
