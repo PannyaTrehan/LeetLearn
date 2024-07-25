@@ -7,7 +7,8 @@ const db = {
 
 db.sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
   host: config.HOST,
-  dialect: config.DIALECT
+  dialect: config.DIALECT,
+  logging: console.log
 });
 
 // Include models.

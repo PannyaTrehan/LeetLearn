@@ -31,8 +31,10 @@ exports.getUsersQuestions = async (req, res) => {
 // Select a specific user's user_questions from the database by their UUID (id)
 exports.getUsersQuestionsWithTags = async (req, res) => {
     try {
+        const user_id = req.user.user_id;
+
         const userQuestions = await db.user_question.findAll({
-            where: { user_id: req.params.id },
+            where: { user_id: user_id },
             attributes: ['next_review', ],
             include: [
                 {
@@ -51,7 +53,11 @@ exports.getUsersQuestionsWithTags = async (req, res) => {
             ]
         });
 
-        res.json(userQuestions);
+        if (userQuestions) {
+            res.json(userQuestions);
+        } else {
+            res.status(404).json({ error: 'User questions not found' });
+        }
     } catch (error) {
         console.error("Error fetching user's questions:", error);
     }
@@ -116,9 +122,14 @@ exports.deleteUserQuestion = async (req, res) => {
 
 exports.dueUserQuestionsWithTags = async (req, res) => {
     try {
-        const { date, id } = req.body;
+        const id = req.user.user_id;
+        const date = req.params.date;
 
         const startDate = new Date(date);
+        if (isNaN(startDate.getTime())) {
+            return res.status(400).json({ error: "Invalid date format. Please use YYYY-MM-DD." });
+        }
+        
         const endDate = new Date(date);
         endDate.setDate(endDate.getDate() + 1);
 

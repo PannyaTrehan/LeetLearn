@@ -12,22 +12,13 @@ exports.getAllUsers = async (req, res) => {
 
 // Select one user from the database by their UUID (id)
 exports.getUserByID = async (req, res) => {
-    const user = await db.user.findByPk(req.params.id);
-  
-    res.json(user);
-};
-
-exports.getUserByEmail = async (req, res) => {
     try {
-        const user = await db.user.findOne({
-            where: {
-                email: req.params.email
-            },
-            attributes: {
-                exclude: ['user_id']
-            }
+        const userID = req.user.user_id;
+    
+        const user = await db.user.findByPk(userID, {
+            attributes: { exclude: ['user_id', 'password', 'createdAt', 'updatedAt'] }
         });
-
+    
         if (user) {
             res.json(user);
         } else {
@@ -36,6 +27,7 @@ exports.getUserByEmail = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
     }
+
 };
 
 // Create a user
@@ -85,7 +77,7 @@ exports.loginUser = async (req, res) => {
             return res.status(401).json({ error: "Invalid email or password" });
         }
 
-        const token = jwt.sign({ id: user.user_id, email: user.email }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ user_id: user.user_id, email: user.email }, process.env.JWT_SECRET, {
             expiresIn: '1h' // Token expires in 1 hour
         });
 
