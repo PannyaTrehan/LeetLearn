@@ -1,59 +1,58 @@
 import { Table } from 'react-bootstrap';
 
-function ProblemsTable() {
+interface TopicTag {
+    name: string;
+    id: string;
+    slug: string;
+}
+  
+interface Question {
+    acRate: number;
+    difficulty: string;
+    freqBar: any; // Adjust type if known
+    frontendQuestionId: string;
+    isFavor: boolean;
+    paidOnly: boolean;
+    status: any; // Adjust type if known
+    title: string;
+    titleSlug: string;
+    topicTags: TopicTag[];
+    hasSolution: boolean;
+    hasVideoSolution: boolean;
+}
+
+interface ProblemsTableProps {
+    data: Question[] | null;
+}
+
+function ProblemsTable({data}: ProblemsTableProps) {
+    if (!data) return null;
+
     return(
         <Table striped hover variant="dark">
             <thead>
                 <tr>
-                    <th>Problem</th>
-                    <th>Next Scheduled</th>
-                    <th>Last Submission</th>
-                    <th>Success</th>
+                    <th>ID</th>
+                    <th>Title</th>
                     <th>Difficulty</th>
-                    <th>Proficiency</th>
+                    <th>Acceptance Rate</th>
+                    <th>Tags</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Two Sum</td>
-                    <td>7/07/2024</td>
-                    <td>4/07/2024</td>
-                    <td>40% (2/5)</td>
-                    <td>Easy</td>
-                    <td>Expert</td>
+                {data.map((question: Question) => (
+                <tr key={question.frontendQuestionId}>
+                    <td>{question.frontendQuestionId}</td>
+                    <td>{question.title}</td>
+                    <td>{question.difficulty}</td>
+                    <td>{question.acRate.toFixed(1)}</td>
+                    <td>
+                        {question.topicTags.map(tag => (
+                            <span key={tag.id}>{tag.name}, </span>
+                        ))}
+                    </td>
                 </tr>
-                <tr>
-                    <td>Two Sum</td>
-                    <td>7/07/2024</td>
-                    <td>4/07/2024</td>
-                    <td>40% (2/5)</td>
-                    <td>Easy</td>
-                    <td>Expert</td>
-                </tr>
-                <tr>
-                    <td>Two Sum</td>
-                    <td>7/07/2024</td>
-                    <td>4/07/2024</td>
-                    <td>40% (2/5)</td>
-                    <td>Easy</td>
-                    <td>Expert</td>
-                </tr>
-                <tr>
-                    <td>Two Sum</td>
-                    <td>7/07/2024</td>
-                    <td>4/07/2024</td>
-                    <td>40% (2/5)</td>
-                    <td>Easy</td>
-                    <td>Expert</td>
-                </tr>
-                <tr>
-                    <td>Two Sum</td>
-                    <td>7/07/2024</td>
-                    <td>4/07/2024</td>
-                    <td>40% (2/5)</td>
-                    <td>Easy</td>
-                    <td>Expert</td>
-                </tr>
+                ))}
             </tbody>
         </Table>
     );
