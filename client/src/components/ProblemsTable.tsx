@@ -1,4 +1,5 @@
 import { Table } from 'react-bootstrap';
+import { createQuestion } from '../api/QuestionRequests';
 
 interface TopicTag {
     name: string;
@@ -28,6 +29,27 @@ interface ProblemsTableProps {
 function ProblemsTable({data}: ProblemsTableProps) {
     if (!data) return null;
 
+    const handleProblemClick = async (question: Question) => {
+        try {
+            if (!question || !question.frontendQuestionId || !question.title || !question.difficulty) {
+                console.error('Invalid question object:', question);
+                return;
+            }
+
+            const title = `${question.frontendQuestionId}. ${question.title}`;
+            const difficulty = question.difficulty;
+
+            const questionResponse = await createQuestion({
+                title,
+                difficulty
+            });
+
+            console.log("Question created:", questionResponse)
+        } catch (error) {
+            console.error('Error creating question:', error);
+        }
+    };
+
     return(
         <Table striped hover variant="dark">
             <thead>
@@ -41,7 +63,7 @@ function ProblemsTable({data}: ProblemsTableProps) {
             </thead>
             <tbody>
                 {data.map((question: Question) => (
-                <tr key={question.frontendQuestionId}>
+                <tr key={question.frontendQuestionId} onClick={() => handleProblemClick(question)}>
                     <td>{question.frontendQuestionId}</td>
                     <td>{question.title}</td>
                     <td>{question.difficulty}</td>
