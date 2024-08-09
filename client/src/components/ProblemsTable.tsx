@@ -44,7 +44,7 @@ function ProblemsTable({data}: ProblemsTableProps) {
                 difficulty
             });
 
-            const next_review = "2025-12-05T00:00:00.000Z";
+            const next_review = "2024-08-09T00:00:00.000Z";
 
             const userQuestionResponse = await createUserQuestion({
                 title,

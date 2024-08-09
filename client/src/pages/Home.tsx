@@ -1,9 +1,42 @@
 import { Container, Row, Col } from 'react-bootstrap';
-import ProblemsTable from '../components/ProblemsTable';
 import styles from "../styles/Home.module.scss";
-import Data from '../components/Data';
+import { getUserQuestions } from '../api/QuestionRequests';
+import { useEffect, useState } from 'react';
+import DailyQuestionsTable from '../components/DailyQuestionsTable';
+
+interface Tag {
+    title: string;
+}
+
+interface DailyQuestion {
+    title: string;
+    difficulty: string;
+    tags: Tag[];
+}
+
+interface DailyQuestionsResponse {
+    next_review: string;
+    question: DailyQuestion;
+}
 
 function Home() {
+    const [queryResult, setQueryResult] = useState<DailyQuestionsResponse[] | null>(null);
+
+    useEffect(() => {
+        const fetchUserQuestions = async () => {
+            try {
+                const data = await getUserQuestions();
+                setQueryResult(data);
+                console.log('Fetched user questions:', data);
+            } catch (error) {
+                console.error('Error fetching user questions:', error);
+            }
+        };
+
+        fetchUserQuestions();
+    }, []);
+
+
     return(
         <Container>
             <Row className='mt-4'>
@@ -19,11 +52,10 @@ function Home() {
                             <h2 className={styles.problemCount}>4</h2>
                         </Col>
                     </Row>
-                    <ProblemsTable />
                 </Col>
             </Row>
             <Row>
-                <Data />
+                <DailyQuestionsTable data={queryResult} /> {/* Pass data to the table */}
             </Row>
         </Container>
     );
