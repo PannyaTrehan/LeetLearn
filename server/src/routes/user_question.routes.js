@@ -16,6 +16,7 @@ module.exports = (express, app) => {
     router.put("/select/:id", authenticateToken, controller.updateUserQuestion);
 
     // Create a user question
+    // router.post("/", authenticateToken, controller.createUserQuestion);
     router.post("/", authenticateToken, controller.createUserQuestion);
 
     // Delete a user question

@@ -1,6 +1,22 @@
 const { where } = require("sequelize");
 const db = require("../database");
 
+exports.getQuestionByTitle = async (req, res) => {
+    try {
+        const question = await db.question.findOne({
+            where: { title: req.body.title}
+        });
+
+        if (!question) {
+            return res.status(400).json({ error: "Question does not exist" });
+        }
+
+        res.json(question);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 // Create a user question
 exports.createQuestion = async (req, res) => {
     try {

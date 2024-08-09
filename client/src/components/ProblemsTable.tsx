@@ -1,5 +1,5 @@
 import { Table } from 'react-bootstrap';
-import { createQuestion } from '../api/QuestionRequests';
+import { createQuestion, createUserQuestion } from '../api/QuestionRequests';
 
 interface TopicTag {
     name: string;
@@ -44,7 +44,15 @@ function ProblemsTable({data}: ProblemsTableProps) {
                 difficulty
             });
 
+            const next_review = "2025-12-05T00:00:00.000Z";
+
+            const userQuestionResponse = await createUserQuestion({
+                title,
+                next_review
+            })
+
             console.log("Question created:", questionResponse)
+            console.log("User question created:", userQuestionResponse)
         } catch (error) {
             console.error('Error creating question:', error);
         }

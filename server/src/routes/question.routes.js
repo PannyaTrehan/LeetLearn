@@ -4,6 +4,7 @@ module.exports = (express, app) => {
 
     // Create a review
     router.post("/", controller.createQuestion);
+    router.get("/", controller.getQuestionByTitle);
 
     // Add routes to server.
     app.use("/api/questions", router);

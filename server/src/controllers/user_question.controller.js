@@ -64,16 +64,27 @@ exports.getUsersQuestionsWithTags = async (req, res) => {
 };
 
 // Create a user question
+//needs {title (question title), user_id (from authentication) and next review date}
 exports.createUserQuestion = async (req, res) => {
-    try {    
-        const userQuestion = await db.user_question.create({
-            user_question: req.body.user_question,
-            next_review: req.body.next_review,
-            user_id: req.body.user_id,
-            question_id: req.body.question_id
+    try {
+        console.log(req.user)
+
+        const question = await db.question.findOne({
+            where: { title: req.body.title}
         });
 
-        res.json(userQuestion);
+        if (!question) {
+            return res.status(400).json({ error: "Question does not exist" });
+        }
+
+        const userQuestion = await db.user_question.create({
+            next_review: req.body.next_review, //this will needed to be calculated via the algorithm that will be implemented
+            user_id: req.user.user_id, //get the user ID from the JWT token
+            // user_id: req.body.user_id, //get the user ID from the JWT token
+            question_id: question.question_id //how do I get this?
+        });
+        
+        res.status(201).json({ message: "User question has been added successfully" });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
