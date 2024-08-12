@@ -96,8 +96,8 @@ async function initialData() {
     const now = new Date();
 
     const user_questions = [
-      { next_review: now, user_id: createdUsers[0].user_id, question_id: createdQuestions[3].question_id },
-      { next_review: now, user_id: createdUsers[1].user_id, question_id: createdQuestions[2].question_id }
+      { next_review: now, state: 'Learning', user_id: createdUsers[0].user_id, question_id: createdQuestions[3].question_id },
+      { next_review: now, state: 'Mature', user_id: createdUsers[1].user_id, question_id: createdQuestions[2].question_id }
     ]
 
     const createdUserQuestions = await db.user_question.bulkCreate(user_questions, { returning: true });

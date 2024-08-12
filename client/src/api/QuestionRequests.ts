@@ -33,7 +33,8 @@ interface QuestionResponse{
 
 interface UserQuestion{
     title: string,
-    next_review: string
+    next_review: string,
+    state: string
 }
 
 interface UserQuestionResponse{

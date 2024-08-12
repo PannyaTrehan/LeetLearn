@@ -80,6 +80,7 @@ exports.createUserQuestion = async (req, res) => {
         const userQuestion = await db.user_question.create({
             next_review: req.body.next_review, //this will needed to be calculated via the algorithm that will be implemented
             user_id: req.user.user_id, //get the user ID from the JWT token
+            state: req.body.state,
             // user_id: req.body.user_id, //get the user ID from the JWT token
             question_id: question.question_id //how do I get this?
         });
@@ -90,7 +91,7 @@ exports.createUserQuestion = async (req, res) => {
     }
 };
 
-// Create a user question
+// Update a user question
 exports.updateUserQuestion = async (req, res) => {
     try {
         const { date } = req.body;

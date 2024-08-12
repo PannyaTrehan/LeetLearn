@@ -10,6 +10,11 @@ module.exports = (sequelize, DataTypes) =>
             type: DataTypes.DATE,
             allowNull: true,
         },
+        state: {
+            type: DataTypes.ENUM('New', 'Learning', 'Relearning', 'Young', 'Mature'),
+            allowNull: false,
+            defaultValue: 'New'
+        },
         question_id: {
             type: DataTypes.INTEGER,
             allowNull: false,

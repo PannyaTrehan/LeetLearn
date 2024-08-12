@@ -38,6 +38,7 @@ function ProblemsTable({data}: ProblemsTableProps) {
 
             const title = `${question.frontendQuestionId}. ${question.title}`;
             const difficulty = question.difficulty;
+            const state = 'Learning';
 
             const questionResponse = await createQuestion({
                 title,
@@ -48,7 +49,8 @@ function ProblemsTable({data}: ProblemsTableProps) {
 
             const userQuestionResponse = await createUserQuestion({
                 title,
-                next_review
+                next_review,
+                state
             })
 
             console.log("Question created:", questionResponse)
