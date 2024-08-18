@@ -1,26 +1,6 @@
 import { GET_QUESTION_LIST } from "./queries/QuestionQueries";
 import { useLazyQuery } from '@apollo/client';
-
-interface TopicTag {
-    name: string;
-    id: string;
-    slug: string;
-}
-  
-interface Question {
-    acRate: number;
-    difficulty: string;
-    freqBar: any;
-    frontendQuestionId: string;
-    isFavor: boolean;
-    paidOnly: boolean;
-    status: any;
-    title: string;
-    titleSlug: string;
-    topicTags: TopicTag[];
-    hasSolution: boolean;
-    hasVideoSolution: boolean;
-}
+import { Question } from "./types/QuestionTypes";
 
 interface ProblemsetQuestionList {
     __typename: string;

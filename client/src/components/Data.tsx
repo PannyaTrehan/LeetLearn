@@ -3,27 +3,7 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_QUESTION_LIST } from '../graphql/queries/QuestionQueries';
-
-interface TopicTag {
-  name: string;
-  id: string;
-  slug: string;
-}
-
-interface Question {
-  acRate: number;
-  difficulty: string;
-  freqBar: any; // Adjust type if known
-  frontendQuestionId: string;
-  isFavor: boolean;
-  paidOnly: boolean;
-  status: any; // Adjust type if known
-  title: string;
-  titleSlug: string;
-  topicTags: TopicTag[];
-  hasSolution: boolean;
-  hasVideoSolution: boolean;
-}
+import { Question } from '../graphql/types/QuestionTypes';
 
 interface DataResponse {
   total: number;

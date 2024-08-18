@@ -1,26 +1,6 @@
 import { Table } from 'react-bootstrap';
 import { createQuestion, createUserQuestion } from '../api/QuestionRequests';
-
-interface TopicTag {
-    name: string;
-    id: string;
-    slug: string;
-}
-  
-interface Question {
-    acRate: number;
-    difficulty: string;
-    freqBar: any; // Adjust type if known
-    frontendQuestionId: string;
-    isFavor: boolean;
-    paidOnly: boolean;
-    status: any; // Adjust type if known
-    title: string;
-    titleSlug: string;
-    topicTags: TopicTag[];
-    hasSolution: boolean;
-    hasVideoSolution: boolean;
-}
+import { Question } from '../graphql/types/QuestionTypes';
 
 interface ProblemsTableProps {
     data: Question[] | null;

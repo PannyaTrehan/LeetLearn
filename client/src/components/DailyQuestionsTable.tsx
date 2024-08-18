@@ -1,5 +1,4 @@
 import { Table } from 'react-bootstrap';
-import { createQuestion, createUserQuestion } from '../api/QuestionRequests';
 
 interface Tag {
     title: string;
