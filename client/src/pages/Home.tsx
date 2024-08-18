@@ -21,12 +21,14 @@ interface DailyQuestionsResponse {
 
 function Home() {
     const [queryResult, setQueryResult] = useState<DailyQuestionsResponse[] | null>(null);
+    const [problemCount, setProblemCount] = useState<number>(0);
 
     useEffect(() => {
         const fetchUserQuestions = async () => {
             try {
                 const data = await getUserQuestions();
                 setQueryResult(data);
+                setProblemCount(data.length);
                 console.log('Fetched user questions:', data);
             } catch (error) {
                 console.error('Error fetching user questions:', error);
@@ -49,7 +51,7 @@ function Home() {
                             <h2 className={styles.heading}>To complete</h2>
                         </Col>
                         <Col>
-                            <h2 className={styles.problemCount}>4</h2>
+                            <h2 className={styles.problemCount}>{problemCount}</h2>
                         </Col>
                     </Row>
                 </Col>
