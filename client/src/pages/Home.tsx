@@ -1,4 +1,4 @@
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Modal, Button } from 'react-bootstrap';
 import styles from "../styles/Home.module.scss";
 import { getUserQuestions } from '../api/QuestionRequests';
 import { useEffect, useState } from 'react';
@@ -22,6 +22,7 @@ interface DailyQuestionsResponse {
 function Home() {
     const [queryResult, setQueryResult] = useState<DailyQuestionsResponse[] | null>(null);
     const [problemCount, setProblemCount] = useState<number>(0);
+    const [showReviewPopUp, setReviewPopUp] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchUserQuestions = async () => {
@@ -37,6 +38,14 @@ function Home() {
 
         fetchUserQuestions();
     }, []);
+
+    //handle click function
+    const handleRowClick = () => {
+        console.log("clicked!");
+        setReviewPopUp(true);
+    }
+
+    const handleClose = () => setReviewPopUp(false);
 
 
     return(
@@ -57,8 +66,14 @@ function Home() {
                 </Col>
             </Row>
             <Row>
-                <DailyQuestionsTable data={queryResult} /> {/* Pass data to the table */}
+                <DailyQuestionsTable data={queryResult} onRowClick={handleRowClick}/> {/* Pass data to the table */}
             </Row>
+
+            <Modal show={showReviewPopUp} onHide={handleClose} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Row Details</Modal.Title>
+                </Modal.Header>
+            </Modal>
         </Container>
     );
 }

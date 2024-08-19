@@ -17,9 +17,10 @@ interface DailyQuestionsResponse {
 
 interface DailyQuestionsTableProps {
     data: DailyQuestionsResponse[] | null;
+    onRowClick: () => void;
 }
 
-function DailyQuestionsTable({data}: DailyQuestionsTableProps) {
+function DailyQuestionsTable({data, onRowClick}: DailyQuestionsTableProps) {
     if (!data) return null;
 
     return(
@@ -34,7 +35,7 @@ function DailyQuestionsTable({data}: DailyQuestionsTableProps) {
             </thead>
             <tbody>
                 {data.map((entry, index) => (
-                    <tr key={index}>
+                    <tr key={index} onClick={() => onRowClick()}>
                         <td>{entry.question.title}</td>
                         <td>{entry.question.difficulty}</td>
                         <td>

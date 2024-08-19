@@ -4,3 +4,15 @@
     padding-left: 4px;
     padding-right: 6px;
 }
+
+.custom-modal .modal-dialog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+}
+
+.custom-modal .modal-content {
+    width: 90%; /* Adjust width as needed */
+    max-width: 600px; /* Adjust max-width as needed */
+}
