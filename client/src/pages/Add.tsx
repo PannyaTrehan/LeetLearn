@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Form, InputGroup } from 'react-bootstrap';
+import { Container, Row, Col, Form, InputGroup, Spinner } from 'react-bootstrap';
 import { FaSearch } from 'react-icons/fa';
 import ProblemsTable from '../components/ProblemsTable';
 import { useQuestionList } from "../graphql/getProblems";
@@ -68,11 +68,21 @@ function Add() {
                             />
                         </InputGroup>
                     </Form>
-                    <ProblemsTable data={queryResult}/>
-                </Row>
-                <Row className='mt-4'>
-                    <h1>Recently completed</h1>
-                    <ProblemsTable data={queryResult}/>
+                    {loading ? (
+                        <Row className='justify-content-center mt-4'>
+                            <Spinner animation="border" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </Spinner>
+                        </Row>
+                    ) : (
+                        <>
+                            <ProblemsTable data={queryResult}/>
+                            <Row className='mt-4'>
+                                <h1>Recently completed</h1>
+                                <ProblemsTable data={queryResult}/>
+                            </Row>
+                        </>
+                    )}
                 </Row>
             </Col>
         </Container>
