@@ -24,6 +24,9 @@ function Home() {
     const [problemCount, setProblemCount] = useState<number>(0);
     const [showReviewPopUp, setReviewPopUp] = useState<boolean>(false);
     const [rowClickedTitle, setRowClickedTitle] = useState<string>("");
+    const [optimal, setOptimal] = useState<number>(3);
+    const [completeTime, setCompleteTime] = useState<number>(1);
+    const [assistance, setAssistance] = useState<number>(1);
 
     useEffect(() => {
         const fetchUserQuestions = async () => {
@@ -47,6 +50,14 @@ function Home() {
     }
 
     const handleClose = () => setReviewPopUp(false);
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        console.log("Optimal", optimal);
+        console.log("Time", completeTime);
+        console.log("Assistance", assistance);
+    }
 
 
     return(
@@ -75,13 +86,15 @@ function Home() {
                     <Modal.Title>{rowClickedTitle}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
+                    <Form onSubmit={handleSubmit}>
                         <Form.Group className='mb-3' controlId='formGroupOne'>
                             <Form.Label>Was the solution optimal?</Form.Label>
                             <Form.Range
                                 min="1"
                                 max="5"
                                 step="1"
+                                value={optimal}
+                                onChange={(e) => setOptimal(Number(e.target.value))}
                             />
                             <div className="d-flex justify-content-between">
                                 {[1, 2, 3, 4, 5].map(value => (
@@ -95,9 +108,11 @@ function Home() {
                                 min="1"
                                 max="4"
                                 step="1"
+                                value={completeTime}
+                                onChange={(e) => setCompleteTime(Number(e.target.value))}
                             />
                             <div className="d-flex justify-content-between">
-                                {["<5m", "<15m", "<30m", "30m+"].map(value => (
+                                {["<5m", "5-15m", "15-30m", "30m+"].map(value => (
                                     <span key={value}>{value}</span>
                                 ))}
                             </div>
@@ -106,21 +121,23 @@ function Home() {
                             <Form.Label>Did you any need help/assistance?</Form.Label>
                             <Form.Range
                                 min="1"
-                                max="5"
+                                max="4"
                                 step="1"
+                                value={assistance}
+                                onChange={(e) => setAssistance(Number(e.target.value))}
                             />
                             <div className="d-flex justify-content-between">
-                                {["none", "a little", "some", "decent amount", "a lot"].map(value => (
+                                {["None", "Little", "Much", "Full"].map(value => (
                                     <span key={value}>{value}</span>
                                 ))}
                             </div>
                         </Form.Group>
+                        <Modal.Footer>
+                            <Button variant="danger" onClick={handleClose}>Unable to Solve</Button>
+                            <Button variant="primary" type="submit">Save changes</Button>
+                        </Modal.Footer>
                     </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary">Close</Button>
-                    <Button variant="primary">Save changes</Button>
-                </Modal.Footer>
             </Modal>
         </Container>
     );

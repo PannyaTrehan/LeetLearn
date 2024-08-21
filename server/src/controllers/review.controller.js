@@ -33,7 +33,13 @@ exports.getUserReviews = async (req, res) => {
 
 // Create a review for a user qustion
 exports.createReview = async (req, res) => {
-    try {    
+    try {
+        //need optimal, time and assistance
+        //need the user_question id
+        //review_id should be auto generated
+        //review_date should be auto generated
+        //successful
+        
         const review = await db.review.create({
             review_id: req.body.user_question,
             review_date: req.body.review_date,

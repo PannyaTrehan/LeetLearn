@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) =>
         },
         review_date: {
             type: DataTypes.DATE,
-            allowNull: false
+            allowNull: false,
+            defaultValue: DataTypes.NOW
         },
         successful: {
             type: DataTypes.BOOLEAN,
@@ -26,7 +27,7 @@ module.exports = (sequelize, DataTypes) =>
             type: DataTypes.INTEGER,
             validate: {
                 min: 0,
-                max: 5
+                max: 4
             },
             allowNull: false
         },
@@ -34,7 +35,7 @@ module.exports = (sequelize, DataTypes) =>
             type: DataTypes.INTEGER,
             validate: {
                 min: 0,
-                max: 5
+                max: 4
             },
             allowNull: false
         },
