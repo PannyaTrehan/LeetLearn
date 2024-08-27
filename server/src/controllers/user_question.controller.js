@@ -67,8 +67,6 @@ exports.getUsersQuestionsWithTags = async (req, res) => {
 //needs {title (question title), user_id (from authentication) and next review date}
 exports.createUserQuestion = async (req, res) => {
     try {
-        console.log(req.user)
-
         const question = await db.question.findOne({
             where: { title: req.body.title}
         });
