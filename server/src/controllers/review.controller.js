@@ -41,8 +41,6 @@ exports.createReview = async (req, res) => {
         //successful
         
         const review = await db.review.create({
-            review_id: req.body.user_question,
-            review_date: req.body.review_date,
             successful: req.body.successful,
             optimal: req.body.optimal,
             time: req.body.time,
