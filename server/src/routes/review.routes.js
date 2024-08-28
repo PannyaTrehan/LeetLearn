@@ -1,6 +1,7 @@
 module.exports = (express, app) => {
     const controller = require("../controllers/review.controller.js");
     const router = express.Router();
+    const authenticateToken = require('../middleware/authenticateToken.js');
   
     // Select all reviews from the database
     router.get("/", controller.getAllReviews);
@@ -9,7 +10,7 @@ module.exports = (express, app) => {
     router.get("/select/:id", controller.getUserReviews);
 
     // Create a review
-    router.post("/", controller.createReview);
+    router.post("/:question", authenticateToken, controller.createReview);
 
     // Add routes to server.
     app.use("/api/reviews", router);

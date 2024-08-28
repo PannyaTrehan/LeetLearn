@@ -39,13 +39,24 @@ exports.createReview = async (req, res) => {
         //review_id should be auto generated
         //review_date should be auto generated
         //successful
+
+        const user_id = req.user.user_id;
+        const question_id = req.params.question;
+
+        const user_question = await db.user_question.findOne({
+            where: {
+                user_id: user_id,
+                question_id: question_id
+            },
+            attributes: ['user_question_id']
+        });
         
         const review = await db.review.create({
-            successful: req.body.successful,
-            optimal: req.body.optimal,
-            time: req.body.time,
-            assistance: req.body.assistance,
-            user_question_id: req.body.user_question_id
+            successful: true,
+            optimal: 5,
+            time: 2,
+            assistance: 4,
+            user_question_id: user_question.user_question_id
         });
 
         res.json(review);
