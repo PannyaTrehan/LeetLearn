@@ -10,7 +10,7 @@ module.exports = (express, app) => {
     router.get("/select/:id", controller.getUserReviews);
 
     // Create a review
-    router.post("/:question", authenticateToken, controller.createReview);
+    router.post("/", authenticateToken, controller.createReview);
 
     // Add routes to server.
     app.use("/api/reviews", router);
