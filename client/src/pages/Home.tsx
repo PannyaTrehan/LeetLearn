@@ -1,4 +1,4 @@
-import { Container, Row, Col, Modal, Button, Form } from 'react-bootstrap';
+import { Container, Row, Col, Modal, Button, Form, ButtonGroup, ToggleButton } from 'react-bootstrap';
 import styles from "../styles/Home.module.scss";
 import { getUserQuestions } from '../api/QuestionRequests';
 import { useEffect, useState } from 'react';
@@ -28,7 +28,7 @@ function Home() {
     const [optimal, setOptimal] = useState<number>(3);
     const [time, setTime] = useState<number>(1);
     const [assistance, setAssistance] = useState<number>(1);
-    const [successful, setSuccessful] = useState<boolean>(true);
+    const [radioValue, setRadioValue] = useState('1');
 
     useEffect(() => {
         const fetchUserQuestions = async () => {
@@ -59,6 +59,12 @@ function Home() {
         try {
             const question = 9; //change this to get the actual question_id
 
+            var successful = true;
+
+            if (radioValue == '0') {
+                successful = false;
+            }
+
             const reviewResponse = await createReview({
                 successful,
                 optimal,
@@ -72,6 +78,11 @@ function Home() {
             console.log(error);
         }
     }
+
+    const radios = [
+        { name: 'Unsuccessful', value: '0' },
+        { name: 'Successful', value: '1' },
+      ];
 
 
     return(
@@ -101,6 +112,27 @@ function Home() {
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
+                        <Form.Group className='mb-3' controlId='formGroupOne'>
+                            <Form.Label>Was your solution successful?</Form.Label>
+                            <div className="d-flex justify-content-center">
+                                <ButtonGroup>
+                                    {radios.map((radio, idx) => (
+                                        <ToggleButton
+                                            key={idx}
+                                            id={`radio-${idx}`}
+                                            type="radio"
+                                            variant={radioValue === radio.value ? 'primary' : 'outline-primary'}
+                                            name="radio"
+                                            value={radio.value}
+                                            checked={radioValue === radio.value}
+                                            onChange={(e) => setRadioValue(e.currentTarget.value)}
+                                        >
+                                            {radio.name}
+                                        </ToggleButton>
+                                    ))}
+                                </ButtonGroup>
+                            </div>
+                        </Form.Group>
                         <Form.Group className='mb-3' controlId='formGroupOne'>
                             <Form.Label>Was the solution optimal?</Form.Label>
                             <Form.Range
@@ -147,7 +179,6 @@ function Home() {
                             </div>
                         </Form.Group>
                         <Modal.Footer>
-                            <Button variant="danger" onClick={handleClose}>Unable to Solve</Button>
                             <Button variant="primary" type="submit">Save changes</Button>
                         </Modal.Footer>
                     </Form>
