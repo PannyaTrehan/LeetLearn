@@ -3,6 +3,7 @@ import styles from "../styles/Home.module.scss";
 import { getUserQuestions } from '../api/QuestionRequests';
 import { useEffect, useState } from 'react';
 import DailyQuestionsTable from '../components/DailyQuestionsTable';
+import { createReview } from '../api/ReviewRequests';
 
 interface Tag {
     title: string;
@@ -25,8 +26,9 @@ function Home() {
     const [showReviewPopUp, setReviewPopUp] = useState<boolean>(false);
     const [rowClickedTitle, setRowClickedTitle] = useState<string>("");
     const [optimal, setOptimal] = useState<number>(3);
-    const [completeTime, setCompleteTime] = useState<number>(1);
+    const [time, setTime] = useState<number>(1);
     const [assistance, setAssistance] = useState<number>(1);
+    const [successful, setSuccessful] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchUserQuestions = async () => {
@@ -54,9 +56,21 @@ function Home() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log("Optimal", optimal);
-        console.log("Time", completeTime);
-        console.log("Assistance", assistance);
+        try {
+            const question = 9; //change this to get the actual question_id
+
+            const reviewResponse = await createReview({
+                successful,
+                optimal,
+                time,
+                assistance,
+                question
+            });
+
+            console.log(reviewResponse);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
 
@@ -108,8 +122,8 @@ function Home() {
                                 min="1"
                                 max="4"
                                 step="1"
-                                value={completeTime}
-                                onChange={(e) => setCompleteTime(Number(e.target.value))}
+                                value={time}
+                                onChange={(e) => setTime(Number(e.target.value))}
                             />
                             <div className="d-flex justify-content-between">
                                 {["<5m", "5-15m", "15-30m", "30m+"].map(value => (

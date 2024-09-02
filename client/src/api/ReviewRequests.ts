@@ -26,6 +26,8 @@ interface ReviewResponse{
 // --- ReviewRequests -------------------------------------------------------------------------------
 async function createReview(review: Review): Promise<ReviewResponse> {
     try {
+        console.log(review);
+        
         const config = getAuthHeaders();
 
         if (!config) {
