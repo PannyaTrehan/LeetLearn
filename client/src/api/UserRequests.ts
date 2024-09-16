@@ -30,7 +30,8 @@ interface UserResponse{
 
 interface LoginResponse{
     message: string,
-    token: string
+    token: string, //JWT (access) token
+    refreshToken: string //refresh token
 }
 
 // --- UserRequests -------------------------------------------------------------------------------
@@ -106,7 +107,8 @@ async function loginUser(user: User): Promise<LoginResponse> {
 
     try {
         const { data } = await axios.post<LoginResponse>(`${API_HOST}/api/users/login`, user);
-        localStorage.setItem('jwtToken', data.token);
+        localStorage.setItem('accessToken', data.token);
+        localStorage.setItem('refreshToken', data.refreshToken);
         localStorage.setItem('user', email);
         return data;
     } catch (error) {
@@ -135,7 +137,7 @@ const isValidMaxQuestions = (maxQuestions: number) => {
 };
 
 const getAuthHeaders = () => {
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem('accessToken');
     if (!token) {
         throw new Error('No token found');
     }

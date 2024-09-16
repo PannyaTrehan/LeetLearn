@@ -136,7 +136,7 @@ async function createUserQuestion(question: UserQuestion): Promise<UserQuestionR
 
 // --- Helper functions ----------------------------------------------------------------------------
 const getAuthHeaders = () => {
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem('accessToken');
     if (!token) {
         throw new Error('No token found');
     }
