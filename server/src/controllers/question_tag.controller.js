@@ -1,4 +1,3 @@
-const { where } = require("sequelize");
 const db = require("../database");
 
 // Create a user question

@@ -1,4 +1,3 @@
-const { where } = require("sequelize");
 const db = require("../database");
 
 // Select all reviews from the database
