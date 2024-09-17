@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Row, Button, Form, Card, Col, FormControl } from 'react-bootstrap';
+import { Container, Row, Button, Form, Card, Col } from 'react-bootstrap';
 import { FaGoogle, FaGithub, FaFacebook } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { createUser, isValidEmail, isValidPassword } from "../api/UserRequests";

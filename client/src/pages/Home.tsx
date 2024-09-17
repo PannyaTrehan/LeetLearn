@@ -1,6 +1,6 @@
 import { Container, Row, Col, Modal, Button, Form } from 'react-bootstrap';
 import styles from "../styles/Home.module.scss";
-import { getUserQuestions } from '../api/QuestionRequests';
+import { getUserQuestions } from '../api/UserQuestionRequests';
 import { useEffect, useState } from 'react';
 import DailyQuestionsTable from '../components/DailyQuestionsTable';
 

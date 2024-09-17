@@ -1,5 +1,6 @@
 import { Table } from 'react-bootstrap';
-import { createQuestion, createUserQuestion } from '../api/QuestionRequests';
+import { createQuestion } from '../api/QuestionRequests';
+import { createUserQuestion } from '../api/UserQuestionRequests';
 import { Question } from '../graphql/types/QuestionTypes';
 
 interface ProblemsTableProps {
