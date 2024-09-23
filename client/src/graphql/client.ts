@@ -1,14 +1,3 @@
-// import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
-
-// const client = new ApolloClient({
-//   link: new HttpLink({
-//     uri: '/api', // This will be proxied to the actual GraphQL endpoint
-//   }),
-//   cache: new InMemoryCache(),
-// });
-
-// export default client;
-
 // client.ts
 import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';

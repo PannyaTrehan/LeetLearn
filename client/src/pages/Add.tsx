@@ -25,15 +25,10 @@ interface Question {
     hasVideoSolution: boolean;
 }
 
-interface DataResponse {
-    total: number;
-    questions: Question[];
-}
-
 function Add() {
     const [queryText, setQueryText] = useState<string>("");
     const [queryResult, setQueryResult] = useState<Question[] | null>(null);
-    const { loading, error, data, fetchQuestions } = useQuestionList();
+    const { loading, data, fetchQuestions } = useQuestionList();
 
     useEffect(() => {
         if (data) {
@@ -77,10 +72,6 @@ function Add() {
                     ) : (
                         <>
                             <ProblemsTable data={queryResult}/>
-                            <Row className='mt-4'>
-                                <h1>Recently completed</h1>
-                                <ProblemsTable data={queryResult}/>
-                            </Row>
                         </>
                     )}
                 </Row>

@@ -1,14 +1,8 @@
-
 // components/Data.tsx
 import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_QUESTION_LIST } from '../graphql/queries/QuestionQueries';
 import { Question } from '../graphql/types/QuestionTypes';
-
-interface DataResponse {
-  total: number;
-  questions: Question[];
-}
 
 const Data: React.FC = () => {
   const { loading, error, data } = useQuery(GET_QUESTION_LIST, {

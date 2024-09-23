@@ -58,6 +58,7 @@ function Signup() {
                         <Card.Body>
                             {generalError && <div className="alert alert-danger">{generalError}</div>}
                             {success && <div className="alert alert-success">{success}</div>}
+                            <h1>Sign Up</h1>
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group controlId="formEmail">
                                     <Form.Label>Email address</Form.Label>

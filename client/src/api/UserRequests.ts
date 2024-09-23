@@ -2,8 +2,6 @@ import axios from "axios";
 
 // --- Constants ----------------------------------------------------------------------------------
 const API_HOST = "http://localhost:4000";
-const USER_KEY = "user";
-
 // --- Types --------------------------------------------------------------------------------------
 interface User{
     email: string,
@@ -56,6 +54,12 @@ async function getUserDetails(email: string): Promise<UserEmailResponse> {
     }
 }
 
+/**
+ * Creates a User.
+ * @param User - The user object.
+ * @returns UserResponse - user data.
+ * @throws Error if the User is invalid or the request fails.
+ */
 async function createUser(user: User): Promise<UserResponse> {
     try {
         if (!user || typeof user !== 'object') {
@@ -87,6 +91,12 @@ async function createUser(user: User): Promise<UserResponse> {
     }
 }
 
+/**
+ * Logs in a user.
+ * @param User (email, password) - The user object. 
+ * @returns UserResponse - user data.
+ * @throws Error if the User is invalid or the request fails.
+ */
 async function loginUser(user: User): Promise<LoginResponse> {
     const email: string = user.email;
     const password: string = user.password;
