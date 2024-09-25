@@ -10,7 +10,7 @@ module.exports = (express, app) => {
     //Protected routes
     router.get("/", authenticateToken, controller.getAllUsers);
     router.get("/select", authenticateToken, controller.getUserByID);
-    router.get("/refresh-token", authenticateToken, controller.refreshToken);
+    router.post("/refresh-token", controller.refreshToken);
     
     app.use("/api/users", router);
   };

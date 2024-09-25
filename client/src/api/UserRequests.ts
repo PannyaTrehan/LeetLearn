@@ -1,4 +1,5 @@
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 // --- Constants ----------------------------------------------------------------------------------
 const API_HOST = "http://localhost:4000";
@@ -30,6 +31,15 @@ interface LoginResponse{
     message: string,
     token: string, //JWT (access) token
     refreshToken: string //refresh token
+}
+
+interface RefreshResponse{
+    accessToken: string
+}
+
+interface User{
+    email: string,
+    password: string
 }
 
 // --- UserRequests -------------------------------------------------------------------------------
@@ -117,12 +127,54 @@ async function loginUser(user: User): Promise<LoginResponse> {
 
     try {
         const { data } = await axios.post<LoginResponse>(`${API_HOST}/api/users/login`, user);
+
+        const accessToken = data.token;
+
+        const decodedToken: any = jwtDecode(accessToken); // You can use jwt-decode library
+        const expiryTime = decodedToken.exp * 1000; // convert expiry time to milliseconds
+
         localStorage.setItem('accessToken', data.token);
         localStorage.setItem('refreshToken', data.refreshToken);
-        localStorage.setItem('user', email);
+        localStorage.setItem('tokenExpiry', expiryTime.toString());
+
+        scheduleTokenRefresh();
+
         return data;
     } catch (error) {
         console.error('Error fetching user data:', error);
+        throw error;
+    }
+}
+
+/**
+ * Refreshes the access token using the refresh token.
+ * @returns A promise that resolves to a new access token and refresh token.
+ * @throws Error if the refresh request fails.
+ */
+async function refreshToken(): Promise<RefreshResponse> {
+    try {
+        const storedRefreshToken = localStorage.getItem('refreshToken');
+        if (!storedRefreshToken) {
+            throw new Error('No refresh token found');
+        }
+
+        // Send a POST request to refresh the token using the refresh token
+        const { data } = await axios.post<RefreshResponse>(`${API_HOST}/api/users/refresh-token`, {
+            token: storedRefreshToken // Send only the refresh token
+        });
+
+        // const { data } = await axios.get<RefreshResponse>(`${API_HOST}/api/users/refresh-token`, storedRefreshToken);
+
+        console.log("AT least you got here");
+
+        // Update the localStorage with the new tokens
+        localStorage.setItem('accessToken', data.accessToken);
+
+        console.log("The new access token is: ", data.accessToken);
+
+        return data;
+    } catch (error) {
+        console.error('Error refreshing token:', error);
         throw error;
     }
 }
@@ -159,7 +211,30 @@ const getAuthHeaders = () => {
     };
 };
 
+function scheduleTokenRefresh() {
+    const expiryTime = parseInt(localStorage.getItem('tokenExpiry') || '0');
+    const currentTime = Date.now();
+    const timeUntilExpiry = expiryTime - currentTime;
+
+    // Refresh token a bit before the actual expiration time (e.g., 1 minute before)
+    const refreshBuffer = 60 * 1000; // 1 minute buffer
+    const refreshTime = timeUntilExpiry - refreshBuffer;
+
+    if (refreshTime > 0) {
+        setTimeout(async () => {
+            try {
+                await refreshToken();
+                scheduleTokenRefresh(); // Reschedule after refreshing
+            } catch (error) {
+                console.error('Error refreshing token:', error);
+                // Optionally handle cases where refresh fails (e.g., logout user)
+            }
+        }, refreshTime);
+    }
+}
+
 export {
     getUserDetails, createUser, loginUser,
-    isValidEmail, isValidPassword, isValidMaxQuestions
+    isValidEmail, isValidPassword, isValidMaxQuestions,
+    refreshToken, scheduleTokenRefresh
 }
