@@ -68,7 +68,7 @@ async function createReview(review: Review): Promise<ReviewResponse> {
 
 // --- Helper functions ----------------------------------------------------------------------------
 const getAuthHeaders = () => {
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem('accessToken');
     if (!token) {
         throw new Error('No token found');
     }

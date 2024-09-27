@@ -1,4 +1,4 @@
-import { useEffect, useState }
+import { useState, useEffect } from 'react';
 import { Container, Row, Col, Modal, Button, Form, ButtonGroup, ToggleButton } from 'react-bootstrap';
 import styles from "../styles/Home.module.scss";
 import { getUserQuestions } from '../api/UserQuestionRequests';
