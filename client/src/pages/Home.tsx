@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
-import { Container, Row, Col, Modal, Button, Form } from 'react-bootstrap';
+import { useEffect, useState }
+import { Container, Row, Col, Modal, Button, Form, ButtonGroup, ToggleButton } from 'react-bootstrap';
 import styles from "../styles/Home.module.scss";
 import { getUserQuestions } from '../api/UserQuestionRequests';
 import DailyQuestionsTable from '../components/DailyQuestionsTable';
+import { createReview } from '../api/ReviewRequests';
 
 interface Tag {
     title: string;
@@ -25,8 +26,9 @@ function Home() {
     const [showReviewPopUp, setReviewPopUp] = useState<boolean>(false);
     const [rowClickedTitle, setRowClickedTitle] = useState<string>("");
     const [optimal, setOptimal] = useState<number>(3);
-    const [completeTime, setCompleteTime] = useState<number>(1);
+    const [time, setTime] = useState<number>(1);
     const [assistance, setAssistance] = useState<number>(1);
+    const [radioValue, setRadioValue] = useState('1');
 
     useEffect(() => {
         const fetchUserQuestions = async () => {
@@ -54,10 +56,33 @@ function Home() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log("Optimal", optimal);
-        console.log("Time", completeTime);
-        console.log("Assistance", assistance);
+        try {
+            const question = 9; //change this to get the actual question_id
+
+            var successful = true;
+
+            if (radioValue == '0') {
+                successful = false;
+            }
+
+            const reviewResponse = await createReview({
+                successful,
+                optimal,
+                time,
+                assistance,
+                question
+            });
+
+            console.log(reviewResponse);
+        } catch (error) {
+            console.log(error);
+        }
     }
+
+    const radios = [
+        { name: 'Unsuccessful', value: '0' },
+        { name: 'Successful', value: '1' },
+      ];
 
 
     return(
@@ -88,6 +113,27 @@ function Home() {
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className='mb-3' controlId='formGroupOne'>
+                            <Form.Label>Was your solution successful?</Form.Label>
+                            <div className="d-flex justify-content-center">
+                                <ButtonGroup>
+                                    {radios.map((radio, idx) => (
+                                        <ToggleButton
+                                            key={idx}
+                                            id={`radio-${idx}`}
+                                            type="radio"
+                                            variant={radioValue === radio.value ? 'primary' : 'outline-primary'}
+                                            name="radio"
+                                            value={radio.value}
+                                            checked={radioValue === radio.value}
+                                            onChange={(e) => setRadioValue(e.currentTarget.value)}
+                                        >
+                                            {radio.name}
+                                        </ToggleButton>
+                                    ))}
+                                </ButtonGroup>
+                            </div>
+                        </Form.Group>
+                        <Form.Group className='mb-3' controlId='formGroupOne'>
                             <Form.Label>Was the solution optimal?</Form.Label>
                             <Form.Range
                                 min="1"
@@ -108,8 +154,8 @@ function Home() {
                                 min="1"
                                 max="4"
                                 step="1"
-                                value={completeTime}
-                                onChange={(e) => setCompleteTime(Number(e.target.value))}
+                                value={time}
+                                onChange={(e) => setTime(Number(e.target.value))}
                             />
                             <div className="d-flex justify-content-between">
                                 {["<5m", "5-15m", "15-30m", "30m+"].map(value => (
@@ -133,7 +179,6 @@ function Home() {
                             </div>
                         </Form.Group>
                         <Modal.Footer>
-                            <Button variant="danger" onClick={handleClose}>Unable to Solve</Button>
                             <Button variant="primary" type="submit">Save changes</Button>
                         </Modal.Footer>
                     </Form>
