@@ -4,8 +4,25 @@ import Navbar from 'react-bootstrap/Navbar';
 import { FaBell, FaUserCircle, FaFire } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import styles from "../styles/MyNavbar.module.scss";
+import { getUserStreak } from '../api/UserRequests';
+import { useState, useEffect } from 'react';
 
 function MyNavbar() {
+  const [streak, setStreak] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchUserStreak = async () => {
+        try {
+            const data = await getUserStreak();
+            setStreak(data.streak);
+        } catch (error) {
+            console.error('Error fetching user questions:', error);
+        }
+    };
+
+    fetchUserStreak();
+}, []);
+
   return (
     <Navbar bg="dark" data-bs-theme="dark" expand="lg" className={styles.myNavbar}>
       <Container>
@@ -23,7 +40,7 @@ function MyNavbar() {
             </Nav.Link>
             <Nav.Link className={styles.streakLink}>
               <FaFire className={styles.streakIcon} />
-              <span className={styles.streakCount}>12</span>
+              <span className={styles.streakCount}>{streak}</span>
             </Nav.Link>
             <Nav.Link as={Link} to="/signup" className={styles.navLink}>
               <FaUserCircle className={styles.profileIcon} />

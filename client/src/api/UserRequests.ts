@@ -42,6 +42,10 @@ interface User{
     password: string
 }
 
+interface StreakResponse{
+    streak: number
+}
+
 // --- UserRequests -------------------------------------------------------------------------------
 /**
  * Fetches user details based on email.
@@ -60,6 +64,24 @@ async function getUserDetails(email: string): Promise<UserEmailResponse> {
         return data;
     } catch (error) {
         console.error('Error fetching user data:', error);
+        throw error;
+    }
+}
+
+/**
+ * Refreshes the access token using the refresh token.
+ * @returns A promise that resolves to a new access token and refresh token.
+ * @throws Error if the refresh request fails.
+ */
+async function getUserStreak(): Promise<StreakResponse> {
+    try {
+        const config = getAuthHeaders();
+        const { data } = await axios.get<StreakResponse>(`${API_HOST}/api/users/streak`, config);
+
+        return data;
+
+    } catch (error) {
+        console.error('Error refreshing token:', error);
         throw error;
     }
 }
@@ -236,5 +258,5 @@ function scheduleTokenRefresh() {
 export {
     getUserDetails, createUser, loginUser,
     isValidEmail, isValidPassword, isValidMaxQuestions,
-    refreshToken, scheduleTokenRefresh
+    refreshToken, scheduleTokenRefresh, getUserStreak
 }

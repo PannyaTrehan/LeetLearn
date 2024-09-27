@@ -29,6 +29,25 @@ exports.getUserByID = async (req, res) => {
 
 };
 
+exports.getUserStreak = async (req, res) => {
+    try {
+        const userID = req.user.user_id;
+
+        const streak = await db.user.findByPk(userID, {
+            attributes: ['streak']
+        })
+
+        if (streak) {
+            // Return just the streak number
+            res.json({ streak: streak.get('streak') });
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
 // Create a user
 exports.createUser = async (req, res) => {
     try {
@@ -49,7 +68,6 @@ exports.createUser = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
 
 // Login a user
 exports.loginUser = async (req, res) => {
@@ -77,11 +95,11 @@ exports.loginUser = async (req, res) => {
         }
 
         const accessToken = jwt.sign({ user_id: user.user_id, email: user.email }, process.env.ACCESS_SECRET, {
-            expiresIn: '1m' // Token expires in 1 hour
+            expiresIn: '1h' // Token expires in 1 hour
         });
 
         const refreshToken = jwt.sign({ user_id: user.user_id, email: user.email }, process.env.REFRESH_SECRET, {
-            expiresIn: '7d' // Refresh token expires in 7 days
+            expiresIn: '30d' // Refresh token expires in 7 days
         });
 
         console.log("ACCESS: ", accessToken);
