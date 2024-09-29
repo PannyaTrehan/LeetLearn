@@ -49,6 +49,14 @@ function Home() {
     const handleRowClick = (entry: string) => {
         setTitle(entry)
         setReviewPopUp(true);
+
+        const cleanedTitle = entry.replace(/^\d+\.\s*/, '').toLowerCase().replace(/\s+/g, '-');
+    
+        // Create the LeetCode URL
+        const leetcodeUrl = `https://leetcode.com/problems/${cleanedTitle}/`;
+    
+        // Open the URL in a new tab and focus on it
+        window.open(leetcodeUrl, '_blank', 'noopener,noreferrer');
     }
 
     const handleClose = () => setReviewPopUp(false);
@@ -57,8 +65,6 @@ function Home() {
         e.preventDefault();
 
         try {
-            console.log(title);
-
             var successful = true;
 
             if (radioValue == '0') {
@@ -72,8 +78,6 @@ function Home() {
                 assistance,
                 title
             });
-
-            console.log(reviewResponse);
         } catch (error) {
             console.log(error);
         }
