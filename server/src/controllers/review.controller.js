@@ -1,5 +1,6 @@
 const db = require("../database");
-const calculateNextReview = require("../utils/spacedRepetitionAlgorithm")
+const calculateNextReview = require("../utils/spacedRepetitionAlgorithm");
+const { getQIDByTitle } = require("../utils/getQIDByTitle")
 
 // Select all reviews from the database
 exports.getAllReviews = async (req, res) => {
@@ -35,24 +36,28 @@ exports.getUserReviews = async (req, res) => {
 exports.createReview = async (req, res) => {
     try {
         //extract required body fields from the request and ensure all are defined
-        const { successful, optimal, time, assistance, question } = req.body;
+
+        const { successful, optimal, time, assistance, title } = req.body;
+        
         if (
             successful === undefined || 
             optimal === undefined || 
             time === undefined || 
             assistance === undefined || 
-            question === undefined
+            title === undefined
         ) {
             return res.status(400).json({ error: "All fields (successful, optimal, time, assistance, question) are required." });
         }
 
-        //for the question that the user wants to review get the unique "user_question" which is based off of the user_id and their questions
-            //refer to the question and user_question table for more detail
+        const question_id = await getQIDByTitle(title);
+
+        // for the question that the user wants to review get the unique "user_question" which is based off of the user_id and their questions
+        //     refer to the question and user_question table for more detail
 
         const user_question = await db.user_question.findOne({
             where: {
                 user_id: req.user.user_id,
-                question_id: question,
+                question_id: question_id,
             },
             attributes: ['user_question_id', 'next_review']
         });

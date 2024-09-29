@@ -16,7 +16,6 @@ interface QuestionResponse{
     difficulty: string
 }
 
-// --- UserRequests -------------------------------------------------------------------------------
 // Takes in a Question object, validates it, and sends a POST request to the API to create the question
 async function createQuestion(question: Question): Promise<QuestionResponse> {
     try {

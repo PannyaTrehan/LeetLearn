@@ -2,7 +2,6 @@ import axios from "axios";
 
 // --- Constants ----------------------------------------------------------------------------------
 const API_HOST = "http://localhost:4000";
-const USER_KEY = "user";
 
 // --- Types --------------------------------------------------------------------------------------
 interface Review{
@@ -10,7 +9,7 @@ interface Review{
     optimal: number,
     time: number,
     assistance: number,
-    question: number
+    title: string
 }
 
 interface ReviewResponse{
@@ -25,9 +24,7 @@ interface ReviewResponse{
 
 // --- ReviewRequests -------------------------------------------------------------------------------
 async function createReview(review: Review): Promise<ReviewResponse> {
-    try {
-        console.log(review);
-        
+    try {        
         const config = getAuthHeaders();
 
         if (!config) {

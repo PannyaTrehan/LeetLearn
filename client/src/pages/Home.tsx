@@ -24,7 +24,7 @@ function Home() {
     const [queryResult, setQueryResult] = useState<DailyQuestionsResponse[] | null>(null);
     const [problemCount, setProblemCount] = useState<number>(0);
     const [showReviewPopUp, setReviewPopUp] = useState<boolean>(false);
-    const [rowClickedTitle, setRowClickedTitle] = useState<string>("");
+    const [title, setTitle] = useState<string>("");
     const [optimal, setOptimal] = useState<number>(3);
     const [time, setTime] = useState<number>(1);
     const [assistance, setAssistance] = useState<number>(1);
@@ -47,7 +47,7 @@ function Home() {
 
     //handle click function
     const handleRowClick = (entry: string) => {
-        setRowClickedTitle(entry)
+        setTitle(entry)
         setReviewPopUp(true);
     }
 
@@ -57,7 +57,7 @@ function Home() {
         e.preventDefault();
 
         try {
-            const question = 9; //change this to get the actual question_id
+            console.log(title);
 
             var successful = true;
 
@@ -70,7 +70,7 @@ function Home() {
                 optimal,
                 time,
                 assistance,
-                question
+                title
             });
 
             console.log(reviewResponse);
@@ -108,7 +108,7 @@ function Home() {
 
             <Modal show={showReviewPopUp} onHide={handleClose} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>{rowClickedTitle}</Modal.Title>
+                    <Modal.Title>{title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
