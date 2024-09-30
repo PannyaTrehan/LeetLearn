@@ -185,8 +185,6 @@ async function refreshToken(): Promise<RefreshResponse> {
             token: storedRefreshToken // Send only the refresh token
         });
 
-        // const { data } = await axios.get<RefreshResponse>(`${API_HOST}/api/users/refresh-token`, storedRefreshToken);
-
         console.log("AT least you got here");
 
         // Update the localStorage with the new tokens
