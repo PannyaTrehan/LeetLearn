@@ -22,6 +22,10 @@ db.question_tag = require("./models/question_tag.js")(db.sequelize, DataTypes);
 db.user.belongsToMany(db.question, {through: db.user_question, foreignKey: "user_id", otherKey: 'question_id'});
 db.question.belongsToMany(db.user, { through: db.user_question, foreignKey: 'question_id', otherKey: 'user_id' });
 
+//1-many relationship between the question and the question_tag
+db.question.hasMany(db.question_tag, { as: "question_tag", foreignKey: "question_id"});
+db.question_tag.belongsTo(db.question, { as: "question", foreignKey: "question_id"});
+
 //1-many relationship between the user_question (user's question that's saved) and a review (user's reviews for a question) 
 db.user_question.hasMany(db.review, { as: "review", foreignKey: "user_question_id"});
 db.review.belongsTo(db.user_question, { as: "user_question", foreignKey: "user_question_id"});
