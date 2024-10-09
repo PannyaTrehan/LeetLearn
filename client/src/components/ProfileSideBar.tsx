@@ -1,6 +1,6 @@
 import Nav from 'react-bootstrap/Nav';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import { FaUserCircle, FaUserAlt, FaCogs, FaSignOutAlt } from 'react-icons/fa';
+import { FaUserAlt, FaCogs, FaSignOutAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useUserProfile } from "../graphql/getProfile";
 import { UserProfileDetails } from "../graphql/types/UserTypes";
@@ -24,7 +24,6 @@ function ProfileSideBar({ show, handleClose }: ProfileSideBarProps) {
     }, [data]);
 
     useEffect(() => {
-        // Fetch profile on component mount
         fetchProfile();
     }, []);
 
@@ -48,15 +47,15 @@ function ProfileSideBar({ show, handleClose }: ProfileSideBarProps) {
                 </div>
 
                 <Nav className="flex-column w-100">
-                <Nav.Link as={Link} to="/profile" className="text-light">
-                    <FaUserAlt className="me-2" /> Your Profile
-                </Nav.Link>
-                <Nav.Link as={Link} to="/repositories" className="text-light">
-                    <FaCogs className="me-2" /> Your LeetCode
-                </Nav.Link>
-                <Nav.Link as={Link} to="/settings" className="text-light">
-                    <FaCogs className="me-2" /> Settings
-                </Nav.Link>
+                    <Nav.Link as={Link} to="/profile" className="text-light">
+                        <FaUserAlt className="me-2" /> Your Profile
+                    </Nav.Link>
+                    <Nav.Link as={Link} to="/leetcode" className="text-light">
+                        <FaCogs className="me-2" /> Your LeetCode
+                    </Nav.Link>
+                    <Nav.Link as={Link} to="/settings" className="text-light">
+                        <FaCogs className="me-2" /> Settings
+                    </Nav.Link>
                 </Nav>
 
                 <hr className="w-100 text-secondary my-2" />
