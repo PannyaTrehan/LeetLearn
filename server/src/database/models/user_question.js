@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) =>
             type: DataTypes.DATE,
             allowNull: true,
         },
-        state: {
+        maturity: {
             type: DataTypes.ENUM('New', 'Learning', 'Relearning', 'Young', 'Mature'),
             allowNull: false,
             defaultValue: 'New'
