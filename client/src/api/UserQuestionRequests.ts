@@ -40,11 +40,31 @@ async function getUserQuestions(): Promise<DailyQuestionsResponse[]> {
         const day = String(currentDate.getDate()).padStart(2, '0');
         const date = `${year}-${month}-${day}`;
 
-        console.log(date);
-
         const config = getAuthHeaders();
 
         const { data } = await axios.get<DailyQuestionsResponse[]>(`${API_HOST}/api/user_questions/due/${date}`, config);
+        console.log(data);
+        return data;
+    } catch (error: any) {
+        if (error.response) {
+            console.error("Server Error:", error.response.status, error.response.data);
+        } else if (error.request) {
+            console.error("Network Error:", error.request);
+        } else {
+            console.error("Error:", error.message);
+        }
+
+        throw error;
+    }
+}
+
+// --- UserQuestionRequests -------------------------------------------------------------------------------
+async function getAllUserQuestions(): Promise<DailyQuestionsResponse[]> {
+    try {
+
+        const config = getAuthHeaders();
+
+        const { data } = await axios.get<DailyQuestionsResponse[]>(`${API_HOST}/api/user_questions/select`, config);
         console.log(data);
         return data;
     } catch (error: any) {
@@ -107,5 +127,5 @@ const getAuthHeaders = () => {
 };
 
 export {
-    createUserQuestion, getUserQuestions
+    createUserQuestion, getUserQuestions, getAllUserQuestions
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Container, Row, Col, Modal, Button, Form, ButtonGroup, ToggleButton } from 'react-bootstrap';
 import styles from "../styles/Home.module.scss";
-import { getUserQuestions } from '../api/UserQuestionRequests';
+import { getAllUserQuestions } from '../api/UserQuestionRequests';
 import DailyQuestionsTable from '../components/DailyQuestionsTable';
 import { createReview } from '../api/ReviewRequests';
 
@@ -33,7 +33,7 @@ function Home() {
     useEffect(() => {
         const fetchUserQuestions = async () => {
             try {
-                const data = await getUserQuestions();
+                const data = await getAllUserQuestions();
                 setQueryResult(data);
                 setProblemCount(data.length);
                 console.log('Fetched user questions:', data);
@@ -183,7 +183,7 @@ function Home() {
                             </div>
                         </Form.Group>
                         <Modal.Footer>
-                            <Button variant="primary" type="submit">Save changes</Button>
+                            <Button variant="primary" type="submit" onClick={handleClose}>Save changes</Button>
                         </Modal.Footer>
                     </Form>
                 </Modal.Body>
