@@ -12,7 +12,7 @@ interface Tag {
 interface DailyQuestion {
     title: string;
     difficulty: string;
-    tags: Tag[];
+    question_tag: Tag[];
 }
 
 interface DailyQuestionsResponse {

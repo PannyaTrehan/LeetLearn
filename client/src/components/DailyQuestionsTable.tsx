@@ -7,7 +7,7 @@ interface Tag {
 interface DailyQuestion {
     title: string;
     difficulty: string;
-    tags: Tag[];
+    question_tag: Tag[];
 }
 
 interface DailyQuestionsResponse {
@@ -39,11 +39,17 @@ function DailyQuestionsTable({data, onRowClick}: DailyQuestionsTableProps) {
                         <td>{entry.question.title}</td>
                         <td>{entry.question.difficulty}</td>
                         <td>
-                            {entry.question.tags.map((tag, tagIndex) => (
-                                <span key={tagIndex}>{tag.title}{tagIndex < entry.question.tags.length - 1 ? ', ' : ''}</span>
-                            ))}
+                            {entry.question.question_tag.length > 0 ? (
+                                    entry.question.question_tag.map((tag, tagIndex) => (
+                                        <span key={tagIndex}>
+                                            {tag.title}{tagIndex < entry.question.question_tag.length - 1 ? ', ' : ''}
+                                        </span>
+                                    ))
+                                ) : (
+                                    <span>No Tags</span>
+                            )}
                         </td>
-                        <td>{new Date(entry.next_review).toLocaleDateString()}</td>
+                        <td>{new Date(entry.next_review).toLocaleDateString('en-GB')}</td>
                     </tr>
                 ))}
             </tbody>

@@ -36,7 +36,7 @@ const Data: React.FC = () => {
           </thead>
           <tbody>
             {data.problemsetQuestionList.questions.map((question: Question) => (
-              <tr key={question.frontendQuestionId}>
+              <tr key={question.frontendQuestionId} style={{ cursor: 'pointer' }}>
                 <td>{question.frontendQuestionId}</td>
                 <td>{question.title}</td>
                 <td>{question.difficulty}</td>

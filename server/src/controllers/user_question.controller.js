@@ -31,10 +31,9 @@ exports.getUsersQuestionsWithTags = async (req, res) => {
                     attributes: ['title', 'difficulty'],
                     include: [
                         {
-                            model: db.tag,
-                            as: 'tags',
-                            attributes: ['title'],
-                            through: { attributes: [] }
+                            model: db.question_tag,
+                            as: 'question_tag',
+                            attributes: ['tag_name'],
                         }
                     ]
                 }
