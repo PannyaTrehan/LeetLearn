@@ -6,13 +6,13 @@ import DailyQuestionsTable from '../components/DailyQuestionsTable';
 import { createReview } from '../api/ReviewRequests';
 
 interface Tag {
-    title: string;
+    tag_name: string;
 }
 
 interface DailyQuestion {
     title: string;
     difficulty: string;
-    tags: Tag[];
+    question_tag: Tag[];
 }
 
 interface DailyQuestionsResponse {
@@ -37,6 +37,14 @@ function Home() {
                 setQueryResult(data);
                 setProblemCount(data.length);
                 console.log('Fetched user questions:', data);
+
+                // Loop through the questions and print the tags
+                data.forEach((questionResponse: DailyQuestionsResponse) => {
+                    console.log('Question:', questionResponse.question.title);
+                    questionResponse.question.question_tag.forEach((tag: Tag) => {
+                        console.log('Tag:', tag.tag_name);
+                    });
+                });
             } catch (error) {
                 console.error('Error fetching user questions:', error);
             }

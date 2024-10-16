@@ -1,7 +1,7 @@
 import { Table } from 'react-bootstrap';
 
 interface Tag {
-    title: string;
+    tag_name: string;
 }
 
 interface DailyQuestion {
@@ -42,11 +42,11 @@ function DailyQuestionsTable({data, onRowClick}: DailyQuestionsTableProps) {
                             {entry.question.question_tag.length > 0 ? (
                                     entry.question.question_tag.map((tag, tagIndex) => (
                                         <span key={tagIndex}>
-                                            {tag.title}{tagIndex < entry.question.question_tag.length - 1 ? ', ' : ''}
+                                            {tag.tag_name}
                                         </span>
                                     ))
                                 ) : (
-                                    <span>No Tags</span>
+                                    <span></span>
                             )}
                         </td>
                         <td>{new Date(entry.next_review).toLocaleDateString('en-GB')}</td>

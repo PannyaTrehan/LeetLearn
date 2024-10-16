@@ -16,6 +16,38 @@ interface QuestionResponse{
     difficulty: string
 }
 
+interface CreateQuestionTagInput{
+    questionTitle: string,
+    tagName: string
+}
+
+interface Data{
+    id: number,
+    tag_name: string,
+    question_id: number
+}
+
+interface CreateQuestionTagResponse{
+    message: string,
+    data: Data
+}
+
+// --- Validation Helper Functions ----------------------------------------------------------------
+function validateQuestionTagInput(tagInput: CreateQuestionTagInput): void {
+    if (!tagInput || typeof tagInput !== 'object') {
+        throw new Error("Invalid question tag data");
+    }
+
+    if (tagInput.questionTitle.trim().length === 0) {
+        throw new Error("Question title cannot be empty");
+    }
+
+    if (tagInput.tagName.trim().length === 0) {
+        throw new Error("Tag name cannot be empty");
+    }
+}
+
+// --- API Functions -----------------------------------------------------------------------------
 // Takes in a Question object, validates it, and sends a POST request to the API to create the question
 async function createQuestion(question: Question): Promise<QuestionResponse> {
     try {
@@ -36,21 +68,46 @@ async function createQuestion(question: Question): Promise<QuestionResponse> {
 
         // Send POST request to create the question
         const response = await axios.post<QuestionResponse>(`${API_HOST}/api/questions`, question);
+        
         return response.data;
     } catch (error: any) {
-        // Handle server, network, and general errors with detailed messages
-        if (error.response) {
-            console.error("Server Error:", error.response.status, error.response.data);
-        } else if (error.request) {
-            console.error("Network Error:", error.request);
-        } else {
-            console.error("Error:", error.message);
-        }
+        handleApiError(error);
 
         throw error;
     }
 }
 
+// Creates a new question tag (tag for a question) and returns the created tag response
+async function createQuestionTag(tagInput: CreateQuestionTagInput): Promise<CreateQuestionTagResponse> {
+    try {
+        console.log(tagInput);
+
+        // Validate input data
+        validateQuestionTagInput(tagInput);
+
+        // Send POST request to create the question
+        const response = await axios.post<CreateQuestionTagResponse>(`${API_HOST}/api/question_tags`, tagInput);
+        
+        return response.data;
+    } catch (error: any) {
+        handleApiError(error);
+
+        throw error;
+    }
+}
+
+// --- Error Handling ----------------------------------------------------------------------------
+function handleApiError(error: any): void {
+    if (error.response) {
+        console.error("Server Error:", error.response.status, error.response.data);
+    } else if (error.request) {
+        console.error("Network Error:", error.request);
+    } else {
+        console.error("Error:", error.message);
+    }
+}
+
+// --- Exports ------------------------------------------------------------------------------------
 export {
-    createQuestion
+    createQuestion, createQuestionTag
 }

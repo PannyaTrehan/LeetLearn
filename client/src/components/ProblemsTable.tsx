@@ -1,5 +1,5 @@
 import { Table } from 'react-bootstrap';
-import { createQuestion } from '../api/QuestionRequests';
+import { createQuestion, createQuestionTag } from '../api/QuestionRequests';
 import { createUserQuestion } from '../api/UserQuestionRequests';
 import { Question } from '../graphql/types/QuestionTypes';
 
@@ -31,8 +31,18 @@ function ProblemsTable({data}: ProblemsTableProps) {
             const userQuestionResponse = await createUserQuestion({
                 title,
                 next_review,
+                //TODO:
+                    //make this into something that the backend determines, rather than the front end
                 state
             })
+
+            for (const tag of question.topicTags) {
+                const createQuestionTagResponse = await createQuestionTag({
+                    questionTitle: title,
+                    tagName: tag.name
+                });
+                console.log("Question tag created:", createQuestionTagResponse);
+            }
 
             console.log("Question created:", questionResponse)
             console.log("User question created:", userQuestionResponse)

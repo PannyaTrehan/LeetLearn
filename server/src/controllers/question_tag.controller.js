@@ -4,10 +4,10 @@ const { getQIDByTitle } = require("../utils/getQIDByTitle")
 // Create a user question
 exports.createQuestionTag = async (req, res) => {
     try {
-        const question_id = await getQIDByTitle(req.body.question_title);
+        const question_id = await getQIDByTitle(req.body.questionTitle);
         
         const questionTag = await db.question_tag.create({
-            tag_name: req.body.tag_name,
+            tag_name: req.body.tagName,
             question_id: question_id
         });
 

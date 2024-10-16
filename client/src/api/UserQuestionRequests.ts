@@ -6,7 +6,7 @@ const API_HOST = "http://localhost:4000";
 
 // --- Types --------------------------------------------------------------------------------------
 interface Tag {
-    title: string;
+    tag_name: string;
 }
 
 interface DailyQuestion {
