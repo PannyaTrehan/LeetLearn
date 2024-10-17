@@ -185,12 +185,8 @@ async function refreshToken(): Promise<RefreshResponse> {
             token: storedRefreshToken // Send only the refresh token
         });
 
-        console.log("AT least you got here");
-
         // Update the localStorage with the new tokens
         localStorage.setItem('accessToken', data.accessToken);
-
-        console.log("The new access token is: ", data.accessToken);
 
         return data;
     } catch (error) {

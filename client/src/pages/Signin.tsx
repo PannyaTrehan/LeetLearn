@@ -32,13 +32,12 @@ function Signin() {
         }
 
         try {
-            const loginResponse = await loginUser({
+            await loginUser({
                 email,
                 password
             });
 
             setSuccess("User logged in successfully!");
-            console.log('User logged in, jwtToken:', loginResponse.token);
         } catch (error) {
             console.error('Error logging in user:', error);
             setGeneralError("Error logging in user. Please try again.");

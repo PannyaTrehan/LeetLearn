@@ -10,8 +10,7 @@ function App() {
       const accessToken = localStorage.getItem('accessToken');
       if (accessToken) {
         try {
-          const refreshResponse = await refreshToken();
-          console.log(refreshResponse);
+          await refreshToken();
           // api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
         } catch (error) {
           console.error('Error refreshing token:', error);

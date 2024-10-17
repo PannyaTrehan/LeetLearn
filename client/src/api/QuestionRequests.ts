@@ -80,8 +80,6 @@ async function createQuestion(question: Question): Promise<QuestionResponse> {
 // Creates a new question tag (tag for a question) and returns the created tag response
 async function createQuestionTag(tagInput: CreateQuestionTagInput): Promise<CreateQuestionTagResponse> {
     try {
-        console.log(tagInput);
-
         // Validate input data
         validateQuestionTagInput(tagInput);
 

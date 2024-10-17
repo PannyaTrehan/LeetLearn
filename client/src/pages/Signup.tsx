@@ -37,13 +37,12 @@ function Signup() {
         }
 
         try {
-            const userResponse = await createUser({
+            await createUser({
                 email,
                 password
             });
 
             setSuccess("User created successfully!");
-            console.log('User created:', userResponse);
         } catch (error) {
             console.error('Error creating user:', error);
             setGeneralError("Error creating user. Please try again.");

@@ -20,7 +20,7 @@ interface DailyQuestionsTableProps {
     onRowClick: (entry: string) => void;
 }
 
-function DailyQuestionsTable({data, onRowClick}: DailyQuestionsTableProps) {
+function ReviewQuestionTable({data, onRowClick}: DailyQuestionsTableProps) {
     if (!data) return null;
 
     return(
@@ -57,4 +57,4 @@ function DailyQuestionsTable({data, onRowClick}: DailyQuestionsTableProps) {
     );
 }
 
-export default DailyQuestionsTable
+export default ReviewQuestionTable

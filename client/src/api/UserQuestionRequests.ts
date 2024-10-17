@@ -43,7 +43,6 @@ async function getUserQuestions(): Promise<DailyQuestionsResponse[]> {
         const config = getAuthHeaders();
 
         const { data } = await axios.get<DailyQuestionsResponse[]>(`${API_HOST}/api/user_questions/due/${date}`, config);
-        console.log(data);
         return data;
     } catch (error: any) {
         if (error.response) {
@@ -65,7 +64,6 @@ async function getAllUserQuestions(): Promise<DailyQuestionsResponse[]> {
         const config = getAuthHeaders();
 
         const { data } = await axios.get<DailyQuestionsResponse[]>(`${API_HOST}/api/user_questions/select`, config);
-        console.log(data);
         return data;
     } catch (error: any) {
         if (error.response) {
@@ -95,7 +93,6 @@ async function createUserQuestion(question: UserQuestion): Promise<UserQuestionR
         }
 
         const config = getAuthHeaders();
-        console.log(config);
 
         const response = await axios.post<UserQuestionResponse>(`${API_HOST}/api/user_questions`, question, config);
         return response.data;

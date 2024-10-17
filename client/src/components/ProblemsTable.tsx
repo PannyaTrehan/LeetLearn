@@ -21,14 +21,14 @@ function ProblemsTable({data}: ProblemsTableProps) {
             const difficulty = question.difficulty;
             const state = 'Learning';
 
-            const questionResponse = await createQuestion({
+            await createQuestion({
                 title,
                 difficulty
             });
 
             const next_review = "2024-08-09T00:00:00.000Z";
 
-            const userQuestionResponse = await createUserQuestion({
+            await createUserQuestion({
                 title,
                 next_review,
                 //TODO:
@@ -37,15 +37,11 @@ function ProblemsTable({data}: ProblemsTableProps) {
             })
 
             for (const tag of question.topicTags) {
-                const createQuestionTagResponse = await createQuestionTag({
+                await createQuestionTag({
                     questionTitle: title,
                     tagName: tag.name
                 });
-                console.log("Question tag created:", createQuestionTagResponse);
             }
-
-            console.log("Question created:", questionResponse)
-            console.log("User question created:", userQuestionResponse)
         } catch (error) {
             console.error('Error creating question:', error);
         }
