@@ -7,13 +7,13 @@ interface ProblemsTableProps {
     data: Question[] | null;
 }
 
-function ProblemsTable({data}: ProblemsTableProps) {
+function AddQuestionTable({data}: ProblemsTableProps) {
     if (!data) return null;
 
     const handleProblemClick = async (question: Question) => {
         try {
             if (!question || !question.frontendQuestionId || !question.title || !question.difficulty) {
-                console.error('Invalid question object:', question);
+                console.error('Invalistated question object:', question);
                 return;
             }
 
@@ -60,11 +60,15 @@ function ProblemsTable({data}: ProblemsTableProps) {
             </thead>
             <tbody>
                 {data.map((question: Question) => (
-                <tr key={question.frontendQuestionId} onClick={() => handleProblemClick(question)}>
+                <tr
+                    key={question.frontendQuestionId}
+                    onClick={() => handleProblemClick(question)}
+                    style={{ cursor: 'pointer' }}
+                >
                     <td>{question.frontendQuestionId}</td>
                     <td>{question.title}</td>
                     <td>{question.difficulty}</td>
-                    <td>{question.acRate.toFixed(1)}</td>
+                    <td>{question.acRate.toFixed(0)}%</td>
                     <td>
                         {question.topicTags.map(tag => (
                             <span key={tag.id}>{tag.name}, </span>
@@ -77,4 +81,4 @@ function ProblemsTable({data}: ProblemsTableProps) {
     );
 }
 
-export default ProblemsTable
+export default AddQuestionTable

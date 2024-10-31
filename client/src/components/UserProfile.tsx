@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 import { GET_USER_PROFILE } from '../graphql/queries/UserQueries';
 
 const Data: React.FC = () => {
-  const { loading, error, data } = useQuery(GET_USER_PROFILE, {
+  const { loading, error } = useQuery(GET_USER_PROFILE, {
     variables: {
       username: 'rahulvarma5297',
     },
