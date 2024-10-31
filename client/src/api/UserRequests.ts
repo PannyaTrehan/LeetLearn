@@ -1,9 +1,8 @@
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 // --- Constants ----------------------------------------------------------------------------------
 const API_HOST = "http://localhost:4000";
-const USER_KEY = "user";
-
 // --- Types --------------------------------------------------------------------------------------
 interface User{
     email: string,
@@ -30,7 +29,21 @@ interface UserResponse{
 
 interface LoginResponse{
     message: string,
-    token: string
+    token: string, //JWT (access) token
+    refreshToken: string //refresh token
+}
+
+interface RefreshResponse{
+    accessToken: string
+}
+
+interface User{
+    email: string,
+    password: string
+}
+
+interface StreakResponse{
+    streak: number
 }
 
 // --- UserRequests -------------------------------------------------------------------------------
@@ -55,6 +68,30 @@ async function getUserDetails(email: string): Promise<UserEmailResponse> {
     }
 }
 
+/**
+ * Refreshes the access token using the refresh token.
+ * @returns A promise that resolves to a new access token and refresh token.
+ * @throws Error if the refresh request fails.
+ */
+async function getUserStreak(): Promise<StreakResponse> {
+    try {
+        const config = getAuthHeaders();
+        const { data } = await axios.get<StreakResponse>(`${API_HOST}/api/users/streak`, config);
+
+        return data;
+
+    } catch (error) {
+        console.error('Error refreshing token:', error);
+        throw error;
+    }
+}
+
+/**
+ * Creates a User.
+ * @param User - The user object.
+ * @returns UserResponse - user data.
+ * @throws Error if the User is invalid or the request fails.
+ */
 async function createUser(user: User): Promise<UserResponse> {
     try {
         if (!user || typeof user !== 'object') {
@@ -86,6 +123,12 @@ async function createUser(user: User): Promise<UserResponse> {
     }
 }
 
+/**
+ * Logs in a user.
+ * @param User (email, password) - The user object. 
+ * @returns UserResponse - user data.
+ * @throws Error if the User is invalid or the request fails.
+ */
 async function loginUser(user: User): Promise<LoginResponse> {
     const email: string = user.email;
     const password: string = user.password;
@@ -106,11 +149,48 @@ async function loginUser(user: User): Promise<LoginResponse> {
 
     try {
         const { data } = await axios.post<LoginResponse>(`${API_HOST}/api/users/login`, user);
-        localStorage.setItem('jwtToken', data.token);
-        localStorage.setItem('user', email);
+
+        const accessToken = data.token;
+
+        const decodedToken: any = jwtDecode(accessToken); // You can use jwt-decode library
+        const expiryTime = decodedToken.exp * 1000; // convert expiry time to milliseconds
+
+        localStorage.setItem('accessToken', data.token);
+        localStorage.setItem('refreshToken', data.refreshToken);
+        localStorage.setItem('tokenExpiry', expiryTime.toString());
+
+        scheduleTokenRefresh();
+
         return data;
     } catch (error) {
         console.error('Error fetching user data:', error);
+        throw error;
+    }
+}
+
+/**
+ * Refreshes the access token using the refresh token.
+ * @returns A promise that resolves to a new access token and refresh token.
+ * @throws Error if the refresh request fails.
+ */
+async function refreshToken(): Promise<RefreshResponse> {
+    try {
+        const storedRefreshToken = localStorage.getItem('refreshToken');
+        if (!storedRefreshToken) {
+            throw new Error('No refresh token found');
+        }
+
+        // Send a POST request to refresh the token using the refresh token
+        const { data } = await axios.post<RefreshResponse>(`${API_HOST}/api/users/refresh-token`, {
+            token: storedRefreshToken // Send only the refresh token
+        });
+
+        // Update the localStorage with the new tokens
+        localStorage.setItem('accessToken', data.accessToken);
+
+        return data;
+    } catch (error) {
+        console.error('Error refreshing token:', error);
         throw error;
     }
 }
@@ -135,7 +215,7 @@ const isValidMaxQuestions = (maxQuestions: number) => {
 };
 
 const getAuthHeaders = () => {
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem('accessToken');
     if (!token) {
         throw new Error('No token found');
     }
@@ -147,7 +227,30 @@ const getAuthHeaders = () => {
     };
 };
 
+function scheduleTokenRefresh() {
+    const expiryTime = parseInt(localStorage.getItem('tokenExpiry') || '0');
+    const currentTime = Date.now();
+    const timeUntilExpiry = expiryTime - currentTime;
+
+    // Refresh token a bit before the actual expiration time (e.g., 1 minute before)
+    const refreshBuffer = 60 * 1000; // 1 minute buffer
+    const refreshTime = timeUntilExpiry - refreshBuffer;
+
+    if (refreshTime > 0) {
+        setTimeout(async () => {
+            try {
+                await refreshToken();
+                scheduleTokenRefresh(); // Reschedule after refreshing
+            } catch (error) {
+                console.error('Error refreshing token:', error);
+                // Optionally handle cases where refresh fails (e.g., logout user)
+            }
+        }, refreshTime);
+    }
+}
+
 export {
     getUserDetails, createUser, loginUser,
-    isValidEmail, isValidPassword, isValidMaxQuestions
+    isValidEmail, isValidPassword, isValidMaxQuestions,
+    refreshToken, scheduleTokenRefresh, getUserStreak
 }

@@ -1,17 +1,5 @@
-const { where, Op } = require("sequelize");
+const { Op } = require("sequelize");
 const db = require("../database");
-
-// Select all user questions from the database
-exports.getAllUserQuestions = async (req, res) => {
-    try {
-        const userQuestions = await db.user_question.findAll();
-  
-        res.json(userQuestions);
-    } catch (error) {
-        console.error("Error fetching all user questions", error);
-    }
-
-};
 
 // Select a specific user's user_questions from the database by their UUID (id)
 exports.getUsersQuestions = async (req, res) => {
@@ -43,14 +31,14 @@ exports.getUsersQuestionsWithTags = async (req, res) => {
                     attributes: ['title', 'difficulty'],
                     include: [
                         {
-                            model: db.tag,
-                            as: 'tags',
-                            attributes: ['title'],
-                            through: { attributes: [] }
+                            model: db.question_tag,
+                            as: 'question_tag',
+                            attributes: ['tag_name'],
                         }
                     ]
                 }
-            ]
+            ],
+            order: [['next_review', 'ASC']]
         });
 
         if (userQuestions) {

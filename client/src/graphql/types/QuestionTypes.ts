@@ -1,16 +1,9 @@
 export interface Question {
-    acRate: number;
-    difficulty: string;
-    freqBar: any;
-    frontendQuestionId: string;
-    isFavor: boolean;
-    paidOnly: boolean;
-    status: any;
-    title: string;
-    titleSlug: string;
-    topicTags: TopicTag[];
-    hasSolution: boolean;
-    hasVideoSolution: boolean;
+    acRate: number; //percentage of users that got this question right
+    difficulty: string; //Easy, Hard etc.
+    frontendQuestionId: string; //leetcode question number
+    title: string; //question title
+    topicTags: TopicTag[]; //leetcode tags (e.g. dynamic programming)
 }
 
 export interface TopicTag {

@@ -4,7 +4,7 @@ module.exports = (express, app) => {
     const authenticateToken = require('../middleware/authenticateToken.js');
   
     // Select all reviews from the database
-    router.get("/", authenticateToken, controller.getAllUserQuestions);
+    // router.get("/", authenticateToken, controller.getAllUserQuestions);
 
     // Select all questions for a given user id
     router.get("/select", authenticateToken, controller.getUsersQuestionsWithTags);

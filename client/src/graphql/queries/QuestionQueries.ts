@@ -1,7 +1,6 @@
-// src/queries.ts
 import { gql } from '@apollo/client';
 
-export const GET_QUESTION_LIST = gql`
+export const GET_LEETCODE_PROBLEMS = gql`
   query problemsetQuestionList(
     $categorySlug: String
     $limit: Int
@@ -18,20 +17,13 @@ export const GET_QUESTION_LIST = gql`
       questions: data {
         acRate
         difficulty
-        freqBar
         frontendQuestionId: questionFrontendId
-        isFavor
-        paidOnly: isPaidOnly
-        status
         title
-        titleSlug
         topicTags {
           name
           id
           slug
         }
-        hasSolution
-        hasVideoSolution
       }
     }
   }

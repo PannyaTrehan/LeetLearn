@@ -1,4 +1,3 @@
-
 function Stats() {
     return(
         <>
@@ -6,4 +5,4 @@ function Stats() {
     );
 }
 
-export default Stats
+export default Stats;

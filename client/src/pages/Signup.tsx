@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Row, Button, Form, Card, Col, FormControl } from 'react-bootstrap';
+import { Container, Row, Button, Form, Card, Col } from 'react-bootstrap';
 import { FaGoogle, FaGithub, FaFacebook } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { createUser, isValidEmail, isValidPassword } from "../api/UserRequests";
@@ -37,13 +37,12 @@ function Signup() {
         }
 
         try {
-            const userResponse = await createUser({
+            await createUser({
                 email,
                 password
             });
 
             setSuccess("User created successfully!");
-            console.log('User created:', userResponse);
         } catch (error) {
             console.error('Error creating user:', error);
             setGeneralError("Error creating user. Please try again.");
@@ -58,6 +57,7 @@ function Signup() {
                         <Card.Body>
                             {generalError && <div className="alert alert-danger">{generalError}</div>}
                             {success && <div className="alert alert-success">{success}</div>}
+                            <h1>Sign Up</h1>
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group controlId="formEmail">
                                     <Form.Label>Email address</Form.Label>
