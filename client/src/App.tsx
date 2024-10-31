@@ -3,6 +3,7 @@ import AllRoutes from './pages/AllRoutes';
 import Footer from './components/Footer';
 import { refreshToken } from './api/UserRequests';
 import { useEffect } from 'react';
+import "./App.scss";
 
 function App() {
   useEffect(() => {
@@ -22,11 +23,13 @@ function App() {
   }, []);
 
   return (
-    <>
+    <div className="app-container d-flex flex-column min-vh-100">
       <MyNavbar />
-      <AllRoutes />
+      <div className="content flex-grow-1">
+        <AllRoutes />
+      </div>
       <Footer />
-    </>
+    </div>
   )
 }
 

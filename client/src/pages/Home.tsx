@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Container, Row, Col, Modal, Button, Form, ButtonGroup, ToggleButton } from 'react-bootstrap';
 import { getAllUserQuestions } from '../api/UserQuestionRequests';
 import { createReview } from '../api/ReviewRequests';
-import ReviewQuestionTable from '../components/ReviewQuestionTable';
+import ReviewQuestionTable from '../components/ReviewTable';
 import styles from "../styles/Home.module.scss";
 
 interface Tag {
