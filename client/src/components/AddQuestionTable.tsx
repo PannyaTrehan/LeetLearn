@@ -19,20 +19,19 @@ function AddQuestionTable({data}: ProblemsTableProps) {
 
             const title = `${question.frontendQuestionId}. ${question.title}`;
             const difficulty = question.difficulty;
-            const state = 'Learning';
+            const state = 'New';
 
             await createQuestion({
                 title,
                 difficulty
             });
 
-            const next_review = "2024-08-09T00:00:00.000Z";
+            //By default the next review for a new user question is scheduled for the day after it was added
+            const next_review = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString();
 
             await createUserQuestion({
                 title,
                 next_review,
-                //TODO:
-                    //make this into something that the backend determines, rather than the front end
                 state
             })
 
