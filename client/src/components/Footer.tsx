@@ -6,7 +6,7 @@ function Footer() {
           <Container>
             <Row>
               <Col md={3} className="d-flex align-items-center justify-content-center text-center py-3">
-                <h2>Leetcode</h2>
+                <h2>LeetLearn</h2>
               </Col>
               <Col md={3} className="text-center py-3">
                 <h5>Help</h5>

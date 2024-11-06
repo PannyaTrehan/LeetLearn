@@ -21,6 +21,7 @@ require("./src/routes/review.routes.js")(express, app);
 require("./src/routes/user_question.routes.js")(express, app);
 require("./src/routes/question.routes.js")(express, app);
 require("./src/routes/question_tag.routes.js")(express, app);
+require("./src/routes/statistics.routes.js")(express, app);
 
 // Set port, listen for requests
 const PORT = 4000;

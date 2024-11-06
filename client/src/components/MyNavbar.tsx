@@ -49,7 +49,7 @@ function MyNavbar() {
     <>
       <Navbar bg="dark" data-bs-theme="dark" expand="lg" className={styles.myNavbar}>
         <Container>
-          <Navbar.Brand as={Link} to="/" className={styles.myNavbarBrand}>Leetcode</Navbar.Brand>
+          <Navbar.Brand as={Link} to="/" className={styles.myNavbarBrand}>LeetLearn</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
@@ -67,9 +67,9 @@ function MyNavbar() {
               </Nav.Link>
               {isLoggedIn ? (
                 // Render profile link or other authenticated-user options
-                <button className={styles.navLink}>
+                <Nav.Link>
                   <FaUserCircle className={styles.profileIcon} onClick={handleShow}/>
-                </button>
+                </Nav.Link>
               ) : (
                 // Render signup/login link for unauthenticated users
                 <Nav.Link as={Link} to="/signup" className={styles.navLink}>

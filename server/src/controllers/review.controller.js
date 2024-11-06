@@ -94,13 +94,13 @@ exports.createReview = async (req, res) => {
             });
         
         //create the review if everything went well
-        // const review = await db.review.create({
-        //     successful: successful,
-        //     optimal: optimal,
-        //     time: time,
-        //     assistance: assistance,
-        //     user_question_id: user_question.user_question_id
-        // });
+        const review = await db.review.create({
+            successful: successful,
+            optimal: optimal,
+            time: time,
+            assistance: assistance,
+            user_question_id: user_question.user_question_id
+        });
 
         // res.json(review);
     } catch (error) {

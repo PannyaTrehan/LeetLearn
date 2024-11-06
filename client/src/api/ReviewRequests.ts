@@ -26,6 +26,7 @@ interface ReviewResponse{
 async function createReview(review: Review): Promise<ReviewResponse> {
     try {        
         const config = getAuthHeaders();
+        console.log(review);
 
         if (!config) {
             throw new Error("Invalid credentials supplied.")
