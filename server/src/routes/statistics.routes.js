@@ -3,8 +3,6 @@ module.exports = (express, app) => {
     const router = express.Router();
     const authenticateToken = require('../middleware/authenticateToken.js');
   
-    router.get("/questions-due", authenticateToken, controller.getQuestionsDue);
-
     router.get("/reviews-completed/:period", authenticateToken, controller.getReviewsCompleted);
 
     router.get("/questions-created", authenticateToken, controller.getQuestionsCreated);

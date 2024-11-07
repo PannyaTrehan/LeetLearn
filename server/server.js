@@ -1,7 +1,10 @@
+require('dotenv').config();
+
 const express = require("express");
 const cors = require("cors");
 const db = require("./src/database/index.js");
-require('dotenv').config();
+const passport = require("./src/utils/passport"); // Import Passport configuration
+const cookieParser = require("cookie-parser");
 
 // Sync the database
 db.sync();
@@ -10,9 +13,11 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser());
+app.use(passport.initialize()); // Initialize Passport
 
 app.get("/", (req, res) => {
-  res.json({ message: "Restful API for the SOIL website!" });
+  res.json({ message: "Restful API for Leetlearn!" });
 });
 
 // Add routes

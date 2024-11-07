@@ -6,6 +6,8 @@ module.exports = (express, app) => {
     // Public routes
     router.post("/", controller.createUser);
     router.post("/login", controller.loginUser);
+    router.get("/auth/google", controller.googleAuth);
+    router.get("/auth/google/callback", controller.googleCallback);
 
     //Protected routes
     router.get("/", authenticateToken, controller.getAllUsers);

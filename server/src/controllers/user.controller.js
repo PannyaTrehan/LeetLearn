@@ -1,6 +1,7 @@
 const db = require("../database");
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken"); // For generating JWT tokens
+const passport = require('../utils/passport');
 
 // Select all users from the database
 exports.getAllUsers = async (req, res) => {
@@ -132,4 +133,27 @@ exports.refreshToken = async (req, res) => {
         // Handle errors like invalid or expired tokens
         return res.status(403).json({ error: "Invalid or expired refresh token" });
     }
+};
+
+// Google OAuth Route
+exports.googleAuth = passport.authenticate('google', { scope: ['profile', 'email'] });
+
+// Google OAuth Callback
+exports.googleCallback = (req, res) => {
+    passport.authenticate('google', { session: false }, (err, user) => {
+        if (err || !user) {
+            return res.status(401).json({ error: 'Authentication failed' });
+        }
+
+        const accessToken = jwt.sign({ user_id: user.user_id, email: user.email }, process.env.ACCESS_SECRET, {
+            expiresIn: '1h'
+        });
+
+        const refreshToken = jwt.sign({ user_id: user.user_id, email: user.email }, process.env.REFRESH_SECRET, {
+            expiresIn: '30d'
+        });
+
+        // Send tokens as JSON response or set them as cookies
+        res.json({ message: 'Login successful', token: accessToken, refreshToken });
+    })(req, res);
 };
